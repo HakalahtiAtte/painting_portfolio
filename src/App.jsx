@@ -355,7 +355,6 @@ const PAINTINGS = [
   { id: "taulu39", src: "images/taulu39.webp", title: "Puro Kiekkikairassa",     size: "100×75cm", medium: "Öljymaalaus" },
   { id: "taulu40", src: "images/taulu40.webp", title: "Järvisuo, Mourunki",      size: "80×60cm",  medium: "Öljymaalaus" },
   { id: "taulu41", src: "images/taulu41.webp", title: "Koivikko",                size: "80×60cm",  medium: "Öljymaalaus" },
-  { id: "taulu42", src: "images/taulu42.webp", title: "Matkalainen",             size: "60×80cm",  medium: "Öljymaalaus" },
   { id: "taulu43", src: "images/taulu43.webp", title: "Onko lahdella lintuja",   size: "75×100cm", medium: "Öljymaalaus" },
   { id: "taulu44", src: "images/taulu44.webp", title: "Korpireitti",             size: "64×80cm",  medium: "Öljymaalaus" },
   { id: "taulu45", src: "images/taulu45.webp", title: "Köykkyrin luontopolun pitkospuut lumen peitossa",size: "60×80cm",  medium: "Öljymaalaus" },
@@ -376,6 +375,7 @@ const SOLD = [
   { id: "taulu31", src: "images/taulu31.webp", title: "Koskikara" },
   { id: "taulu32", src: "images/taulu32.webp", title: "Västäräkki" },
   { id: "taulu19", src: "images/taulu19.webp", title: "Suopursumetsä" },
+  { id: "taulu42", src: "images/taulu42.webp", title: "Matkalainen" },
 ];
 
 function ForestSVG() {
@@ -697,72 +697,6 @@ function HomePage({ setModal }) {
   );
 }
 
-function BeforeAfterSlider({ before, after, beforeAlt, afterAlt, aspectRatio = "3/4" }) {
-  const [pos, setPos] = useState(50); // percentage 0-100
-  const containerRef = useRef(null);
-  const dragging = useRef(false);
-
-  const getPos = (clientX) => {
-    const rect = containerRef.current.getBoundingClientRect();
-    const x = Math.max(0, Math.min(clientX - rect.left, rect.width));
-    return (x / rect.width) * 100;
-  };
-
-  const onMouseDown = (e) => { dragging.current = true; e.preventDefault(); };
-  const onMouseMove = (e) => { if (dragging.current) setPos(getPos(e.clientX)); };
-  const onMouseUp   = ()  => { dragging.current = false; };
-
-  const onTouchStart = () => { dragging.current = true; };
-  const onTouchMove  = (e) => { if (dragging.current) setPos(getPos(e.touches[0].clientX)); };
-  const onTouchEnd   = ()  => { dragging.current = false; };
-
-  useEffect(() => {
-    window.addEventListener("mousemove", onMouseMove);
-    window.addEventListener("mouseup",   onMouseUp);
-    return () => {
-      window.removeEventListener("mousemove", onMouseMove);
-      window.removeEventListener("mouseup",   onMouseUp);
-    };
-  }, []);
-
-  return (
-    <div>
-      <div
-        ref={containerRef}
-        className="ba-slider"
-        style={{ aspectRatio }}
-        onMouseDown={onMouseDown}
-        onTouchStart={onTouchStart}
-        onTouchMove={onTouchMove}
-        onTouchEnd={onTouchEnd}
-      >
-        {/* Base image — "after" (painting), always full width */}
-        <img src={after} alt={afterAlt} style={{ position:"absolute", inset:0 }} loading="lazy"/>
-
-        {/* Overlay — "before" (reference), clipped to left of slider */}
-        <div style={{ position:"absolute", inset:0, overflow:"hidden", width:`${pos}%` }}>
-          <img src={before} alt={beforeAlt}
-            style={{ position:"absolute", top:0, left:0, width:`${10000/pos}%`, maxWidth:"none", height:"100%" }}
-            loading="lazy"/>
-        </div>
-
-        {/* Labels */}
-        <span className="ba-label" style={{ left:12 }}>Referenssi</span>
-        <span className="ba-label" style={{ right:12 }}>Maalaus</span>
-
-        {/* Drag handle */}
-        <div className="ba-handle" style={{ left:`${pos}%` }}
-          onMouseDown={onMouseDown}
-          onTouchStart={onTouchStart}>
-          <div className="ba-handle-circle">◂▸</div>
-        </div>
-      </div>
-      <p style={{ fontSize:"0.68rem", color:"var(--muted)", letterSpacing:"0.1em", textAlign:"center", marginTop:"0.75rem" }}>
-        Vedä palkkia vertaillaksesi referenssikuvaa ja valmista maalausta
-      </p>
-    </div>
-  );
-}
 
 function GatePanel({ onOpen }) {
   return (
