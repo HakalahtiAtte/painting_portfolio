@@ -359,7 +359,8 @@ const PAINTINGS = [
   { id: "taulu44", src: "images/taulu44.webp", title: "Korpireitti",             size: "64×80cm",  medium: "Öljymaalaus" },
   { id: "taulu45", src: "images/taulu45.webp", title: "Köykkyrin luontopolun pitkospuut lumen peitossa",size: "60×80cm",  medium: "Öljymaalaus" },
   { id: "taulu46", src: "images/taulu46.webp", title: "Tundrahanhet", size: "80×60cm",  medium: "Öljymaalaus" },
-  { id: "taulu47", src: "images/taulu47.webp", title: "Tarkkana", size: "60×68cm", medium: "Öljymaalaus" },
+  { id: "taulu47", src: "images/taulu47.webp", title: "Tarkkana",                size: "60×68cm",  medium: "Öljymaalaus" },
+  { id: "taulu48", src: "images/taulu48.webp", title: "Näkymä Rastilammelle",   size: "65×85cm",  medium: "Öljymaalaus" },
 ];
 
 const NUDE_PAINTINGS = [
