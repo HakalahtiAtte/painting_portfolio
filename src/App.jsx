@@ -411,6 +411,14 @@ function ForestSVG() {
   );
 }
 
+const ROUTES = {
+  "/":             "home",
+  "/tilaustyot":   "custom",
+  "/yhteydenotot": "contact",
+};
+const PATHS = { home: "/", custom: "/tilaustyot", contact: "/yhteydenotot" };
+function pathToPage(path) { return ROUTES[path] ?? "home"; }
+
 function Nav({ page, setPage }) {
   const [open, setOpen] = useState(false);
   const navRef = useRef(null);
@@ -811,11 +819,22 @@ function ContactPage() {
 }
 
 export default function App() {
-  const [page, setPage]   = useState("home");
+  const [page, setPage]   = useState(() => pathToPage(window.location.pathname));
   const [modal, setModal] = useState(null);
 
+  const navigate = (id) => {
+    window.history.pushState({}, "", PATHS[id] ?? "/");
+    setPage(id);
+  };
+
+  useEffect(() => {
+    const onPop = () => setPage(pathToPage(window.location.pathname));
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, []);
+
   const renderPage = () => {
-    if (page === "custom")  return <CustomPage setPage={setPage}/>;
+    if (page === "custom")  return <CustomPage setPage={navigate}/>;
     if (page === "contact") return <ContactPage/>;
     return <HomePage setModal={setModal}/>;
   };
@@ -832,7 +851,7 @@ export default function App() {
         display:"flex", alignItems:"center", justifyContent:"space-between",
         padding:"0 2rem", height:64,
       }}>
-        <button onClick={() => setPage("home")}
+        <button onClick={() => navigate("home")}
           style={{ background:"none", border:"none", cursor:"pointer", textAlign:"left" }}
           aria-label="Etusivulle">
           <div style={{ fontFamily:"var(--font-display)", fontSize:"1.45rem", fontWeight:400, color:"var(--cream)", letterSpacing:"0.1em", lineHeight:1 }}>
@@ -842,7 +861,7 @@ export default function App() {
             Öljymaalaukset
           </div>
         </button>
-        <Nav page={page} setPage={setPage}/>
+        <Nav page={page} setPage={navigate}/>
       </header>
 
       <main>{renderPage()}</main>
