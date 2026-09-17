@@ -41,8 +41,8 @@ for src in sorted(SOURCE_DIR.iterdir()):
 
     dest = src.with_suffix(".webp")
 
-    # Skip already-optimised WebP files unless --force or source is non-WebP
-    if dest.exists() and not FORCE and src.suffix.lower() == ".webp":
+    # Skip if destination already exists unless --force
+    if dest.exists() and not FORCE:
         skipped += 1
         continue
 

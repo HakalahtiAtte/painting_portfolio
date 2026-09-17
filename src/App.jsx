@@ -167,6 +167,9 @@ const GLOBAL_CSS = `
   .form-btn:hover { background: #c4ac6a; transform: translateY(-1px); }
   .form-btn:disabled { background: var(--mid); color: var(--muted); cursor: not-allowed; transform: none; }
 
+  .form-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+  @media (min-width: 540px) { .form-grid { grid-template-columns: 1fr 1fr; } }
+
   ::-webkit-scrollbar { width: 6px; }
   ::-webkit-scrollbar-track { background: var(--black); }
   ::-webkit-scrollbar-thumb { background: var(--mid); border-radius: 3px; }
@@ -480,18 +483,18 @@ function Modal({ painting, onClose }) {
   }, [onClose]);
   if (!painting) return null;
   return (
-    <div className="modal-overlay" onClick={onClose} role="dialog" aria-modal="true" aria-label={painting.title}>
+    <div className="modal-overlay" onClick={onClose} role="dialog" aria-modal="true" aria-label={painting.title || "Maalaus"}>
       <div onClick={(e) => e.stopPropagation()} style={{ position:"relative", maxWidth:"90vw" }}>
         <button onClick={onClose} aria-label="Sulje"
           style={{ position:"absolute", top:-16, right:-16, background:"var(--mid)", border:"1px solid var(--border)", color:"var(--cream)", width:32, height:32, borderRadius:"50%", cursor:"pointer", fontSize:"0.9rem", display:"flex", alignItems:"center", justifyContent:"center", zIndex:1 }}>
           ✕
         </button>
         <img className="modal-img" src={painting.src}
-          alt={`${painting.title}${painting.size ? ` – öljymaalaus ${painting.size}` : ""}`}
+          alt={`${painting.title || "Maalaus"}${painting.size ? ` – öljymaalaus ${painting.size}` : " – öljymaalaus"}`}
           style={{ maxWidth:"85vw", maxHeight:"78vh", objectFit:"contain", display:"block" }}
           loading="eager"/>
         <div style={{ padding:"1rem 0.25rem 0", borderTop:"1px solid var(--border)", marginTop:"0.75rem" }}>
-          <p style={{ fontFamily:"var(--font-display)", fontSize:"1.3rem", fontWeight:400, color:"var(--cream)", letterSpacing:"0.04em" }}>{painting.title}</p>
+          {painting.title && <p style={{ fontFamily:"var(--font-display)", fontSize:"1.3rem", fontWeight:400, color:"var(--cream)", letterSpacing:"0.04em" }}>{painting.title}</p>}
           {painting.size && <p style={{ fontSize:"0.82rem", color:"var(--muted)", letterSpacing:"0.1em", marginTop:"0.25rem" }}>{painting.size} · {painting.medium}</p>}
         </div>
       </div>
@@ -577,27 +580,27 @@ function ContactForm() {
 
   return (
     <form onSubmit={handleSubmit} style={{ display:"flex", flexDirection:"column", gap:"1rem" }}>
-      <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"1rem" }}>
+      <div className="form-grid">
         <div>
-          <label style={{ display:"block", fontSize:"0.68rem", letterSpacing:"0.2em", textTransform:"uppercase", color:"var(--gold)", marginBottom:"0.5rem" }}>
+          <label htmlFor="contact-name" style={{ display:"block", fontSize:"0.68rem", letterSpacing:"0.2em", textTransform:"uppercase", color:"var(--gold)", marginBottom:"0.5rem" }}>
             Nimi
           </label>
-          <input className="form-input" type="text" name="name" value={form.name}
-            onChange={handleChange} placeholder="Etunimi Sukunimi" required/>
+          <input id="contact-name" className="form-input" type="text" name="name" value={form.name}
+            onChange={handleChange} placeholder="Etunimi Sukunimi" autoComplete="name" required/>
         </div>
         <div>
-          <label style={{ display:"block", fontSize:"0.68rem", letterSpacing:"0.2em", textTransform:"uppercase", color:"var(--gold)", marginBottom:"0.5rem" }}>
+          <label htmlFor="contact-email" style={{ display:"block", fontSize:"0.68rem", letterSpacing:"0.2em", textTransform:"uppercase", color:"var(--gold)", marginBottom:"0.5rem" }}>
             Sähköposti
           </label>
-          <input className="form-input" type="email" name="email" value={form.email}
-            onChange={handleChange} placeholder="sinun@email.fi" required/>
+          <input id="contact-email" className="form-input" type="email" name="email" value={form.email}
+            onChange={handleChange} placeholder="sinun@email.fi" autoComplete="email" required/>
         </div>
       </div>
       <div>
-        <label style={{ display:"block", fontSize:"0.68rem", letterSpacing:"0.2em", textTransform:"uppercase", color:"var(--gold)", marginBottom:"0.5rem" }}>
+        <label htmlFor="contact-message" style={{ display:"block", fontSize:"0.68rem", letterSpacing:"0.2em", textTransform:"uppercase", color:"var(--gold)", marginBottom:"0.5rem" }}>
           Viesti
         </label>
-        <textarea className="form-input" name="message" value={form.message}
+        <textarea id="contact-message" className="form-input" name="message" value={form.message}
           onChange={handleChange} placeholder="Kerro mitä sinulla on mielessä — taulun osto, tilaustyö tai muu kysymys..."
           rows={5} maxLength={2000} required/>
       </div>
@@ -719,10 +722,13 @@ function GatePanel({ onOpen }) {
 
 function NudeSection({ setModal }) {
   const [state, setState] = useState("closed"); // "closed" | "revealing" | "open"
+  const timerRef = useRef(null);
+
+  useEffect(() => () => clearTimeout(timerRef.current), []);
 
   const handleOpen = () => {
     setState("revealing");
-    setTimeout(() => setState("open"), 1050);
+    timerRef.current = setTimeout(() => setState("open"), 1050);
   };
 
   return (
