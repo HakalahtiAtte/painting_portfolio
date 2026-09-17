@@ -554,17 +554,19 @@ const FORMSPREE_ID = "xdaplyop";
 function ContactForm() {
   const [form, setForm]     = useState({ name:"", email:"", message:"" });
   const [status, setStatus] = useState("idle"); // idle | sending | success | error
+  const successRef          = useRef(null);
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!form.name.trim() || !form.message.trim()) return;
     setStatus("sending");
     try {
       const res = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
         method: "POST",
         headers: { "Content-Type": "application/json", "Accept": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ name: form.name.trim(), email: form.email.trim(), message: form.message.trim() }),
       });
       if (res.ok) {
         setStatus("success");
@@ -577,9 +579,13 @@ function ContactForm() {
     }
   };
 
+  useEffect(() => {
+    if (status === "success" && successRef.current) successRef.current.focus();
+  }, [status]);
+
   if (status === "success") {
     return (
-      <div style={{ padding:"2rem", border:"1px solid var(--gold)", background:"var(--dark)", textAlign:"center" }}>
+      <div ref={successRef} tabIndex={-1} style={{ padding:"2rem", border:"1px solid var(--gold)", background:"var(--dark)", textAlign:"center" }}>
         <p style={{ fontSize:"0.68rem", letterSpacing:"0.28em", textTransform:"uppercase", color:"var(--gold)", marginBottom:"0.75rem" }}>Viesti lähetetty</p>
         <p style={{ color:"var(--cream)", fontFamily:"var(--font-display)", fontSize:"1.3rem", fontWeight:300 }}>Kiitos! Vastaan mahdollisimman pian.</p>
       </div>
@@ -634,13 +640,6 @@ function HomePage({ setModal }) {
 
   return (
     <div className="page-enter">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
-        "@context":"https://schema.org", "@type":"Person",
-        name:"Janne Hakalahti", jobTitle:"Taidemaalari",
-        description:"Suomalainen taidemaalari Kempeleestä. Käsinmaalattuja öljymaalauksia: lintuaiheita, maisemia ja luontoa.",
-        email:"janne.hakalahti@gmail.com", url:SITE_URL,
-        address:{ "@type":"PostalAddress", addressLocality:"Kempele", addressCountry:"FI" },
-      })}}/>
 
       {/* Hero */}
       <section className="forest-hero" aria-labelledby="hero-title"
