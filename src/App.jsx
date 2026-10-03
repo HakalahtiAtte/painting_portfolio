@@ -50,12 +50,18 @@ const GLOBAL_CSS = `
 
   /* Gallery card */
   .gallery-card {
+    position: relative;
     cursor: pointer;
     outline: none;
     border: 1px solid var(--border);
     background: var(--dark);
     transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
   }
+  .gallery-open { background: none; border: 0; color: inherit; font: inherit; text-align: inherit; cursor: pointer; }
+  .gallery-open::after { content: ''; position: absolute; inset: 0; }
+  .gallery-card:focus-within { outline: 2px solid var(--gold); outline-offset: 3px; }
+  a.nav-btn, a.form-btn { display: inline-block; text-decoration: none; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
   .gallery-card:hover, .gallery-card:focus-visible {
     border-color: var(--gold);
     transform: translateY(-4px);
@@ -99,6 +105,7 @@ const GLOBAL_CSS = `
 
   /* Modal */
   .modal-overlay {
+    width: 100%; height: 100%; max-width: none; max-height: none; border: 0; color: inherit;
     position: fixed; inset: 0;
     background: rgba(5,5,4,0.96);
     z-index: 1000;
@@ -106,6 +113,7 @@ const GLOBAL_CSS = `
     padding: 1rem;
     animation: fadeIn 0.2s ease;
   }
+  .modal-overlay:not([open]) { display: none; }
   @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
   .modal-img { animation: scaleIn 0.25s ease; }
   @keyframes scaleIn { from { transform: scale(0.96); opacity:0; } to { transform: scale(1); opacity:1; } }
@@ -281,6 +289,13 @@ const GLOBAL_CSS = `
     from { transform: translateX(0); }
     to   { transform: translateX(100%); }
   }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    .curtain { display: none; }
+    .gallery-card:hover, .gallery-card:focus-visible, .gallery-card:hover img,
+    .gallery-card:focus-visible img, .form-btn:hover { transform: none; }
+  }
 `;
 
 function GlobalStyles() {
@@ -364,6 +379,7 @@ const PAINTINGS = [
   { id: "taulu46", src: "images/taulu46.webp", title: "Tundrahanhet", size: "80×60cm",  medium: "Öljymaalaus" },
   { id: "taulu47", src: "images/taulu47.webp", title: "Tarkkana",                size: "60×68cm",  medium: "Öljymaalaus" },
   { id: "taulu48", src: "images/taulu48.webp", title: "Näkymä Rastilammelle",   size: "65×85cm",  medium: "Öljymaalaus" },
+  { id: "taulu49", src: "images/taulu49.webp", title: "Haastaja",               size: "130×88cm", medium: "Öljymaalaus" },
 ];
 
 const NUDE_PAINTINGS = [
@@ -419,6 +435,15 @@ const ROUTES = {
 const PATHS = { home: "/", custom: "/tilaustyot", contact: "/yhteydenotot" };
 function pathToPage(path) { return ROUTES[path] ?? "home"; }
 
+function PageLink({ page, navigate, children, onNavigate, ...props }) {
+  return <a {...props} href={PATHS[page]} onClick={(event) => {
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    navigate(page);
+    onNavigate?.();
+  }}>{children}</a>;
+}
+
 function Nav({ page, setPage }) {
   const [open, setOpen] = useState(false);
   const navRef = useRef(null);
@@ -427,7 +452,6 @@ function Nav({ page, setPage }) {
     { id: "custom",  label: "Tilaustyöt" },
     { id: "contact", label: "Yhteydenotot" },
   ];
-  const handleNav = (id) => { setPage(id); setOpen(false); };
 
   useEffect(() => {
     if (!open) return;
@@ -458,23 +482,21 @@ function Nav({ page, setPage }) {
       {/* Desktop nav — always visible on wide screens */}
       <div className="nav-desktop">
         {links.map((l) => (
-          <button key={l.id} className={`nav-btn${page===l.id?" active":""}`}
-            onClick={() => handleNav(l.id)}
+          <PageLink key={l.id} page={l.id} navigate={setPage} onNavigate={() => setOpen(false)} className={`nav-btn${page===l.id?" active":""}`}
             aria-current={page===l.id ? "page" : undefined}>
             {l.label}
-          </button>
+          </PageLink>
         ))}
       </div>
       {/* Mobile dropdown */}
       {open && (
         <div className="nav-mobile-menu">
           {links.map((l) => (
-            <button key={l.id} className={`nav-btn${page===l.id?" active":""}`}
-              onClick={() => handleNav(l.id)}
+            <PageLink key={l.id} page={l.id} navigate={setPage} onNavigate={() => setOpen(false)} className={`nav-btn${page===l.id?" active":""}`}
               aria-current={page===l.id ? "page" : undefined}
               style={{ display:"block", width:"100%", textAlign:"right", padding:"0.85rem 1.5rem" }}>
               {l.label}
-            </button>
+            </PageLink>
           ))}
         </div>
       )}
@@ -483,15 +505,23 @@ function Nav({ page, setPage }) {
 }
 
 function Modal({ painting, onClose }) {
+  const dialogRef = useRef(null);
   useEffect(() => {
-    const h = (e) => { if (e.key==="Escape") onClose(); };
-    window.addEventListener("keydown", h);
+    const opener = document.activeElement;
+    const dialog = dialogRef.current;
+    const previousOverflow = document.body.style.overflow;
+    dialog.showModal();
+    dialog.querySelector("button").focus();
     document.body.style.overflow = "hidden";
-    return () => { window.removeEventListener("keydown", h); document.body.style.overflow = ""; };
-  }, [onClose]);
+    return () => {
+      dialog.close();
+      document.body.style.overflow = previousOverflow;
+      if (opener?.isConnected) opener.focus();
+    };
+  }, []);
   if (!painting) return null;
   return (
-    <div className="modal-overlay" onClick={onClose} role="dialog" aria-modal="true" aria-label={painting.title || "Maalaus"}>
+    <dialog ref={dialogRef} className="modal-overlay" onCancel={(event) => { event.preventDefault(); onClose(); }} onClick={(event) => { if (event.target === event.currentTarget) onClose(); }} aria-label={painting.title || "Maalaus"}>
       <div onClick={(e) => e.stopPropagation()} style={{ position:"relative", maxWidth:"90vw" }}>
         <button onClick={onClose} aria-label="Sulje"
           style={{ position:"absolute", top:-16, right:-16, background:"var(--mid)", border:"1px solid var(--border)", color:"var(--cream)", width:32, height:32, borderRadius:"50%", cursor:"pointer", fontSize:"0.9rem", display:"flex", alignItems:"center", justifyContent:"center", zIndex:1 }}>
@@ -506,15 +536,13 @@ function Modal({ painting, onClose }) {
           {painting.size && <p style={{ fontSize:"0.82rem", color:"var(--muted)", letterSpacing:"0.1em", marginTop:"0.25rem" }}>{painting.size} · {painting.medium}</p>}
         </div>
       </div>
-    </div>
+    </dialog>
   );
 }
 
 function GalleryCard({ painting, onClick, priority = false }) {
   return (
-    <article className="gallery-card" onClick={() => onClick(painting)}
-      tabIndex={0} onKeyDown={(e) => { if (e.key==="Enter" || e.key===" ") onClick(painting); }}
-      aria-label={painting.title ? `Avaa ${painting.title}` : "Avaa maalaus"}
+    <article className="gallery-card"
       style={{ borderRadius:0, overflow:"hidden" }}>
       <div style={{ position:"relative", aspectRatio:"4/3", overflow:"hidden", background:"var(--mid)" }}>
         <img src={painting.src}
@@ -526,11 +554,12 @@ function GalleryCard({ painting, onClick, priority = false }) {
       </div>
       {(painting.title || painting.size || painting.medium) && (
         <div style={{ padding:"0.9rem 1rem 1.1rem", borderTop:"1px solid var(--border)" }}>
-          {painting.title  && <h3 style={{ fontFamily:"var(--font-display)", fontSize:"1.1rem", fontWeight:400, color:"var(--cream)", letterSpacing:"0.04em", marginBottom:"0.3rem" }}>{painting.title}</h3>}
+          {painting.title  && <h3 style={{ fontFamily:"var(--font-display)", fontSize:"1.1rem", fontWeight:400, color:"var(--cream)", letterSpacing:"0.04em", marginBottom:"0.3rem" }}><button type="button" className="gallery-open" onClick={() => onClick(painting)} aria-label={`Avaa ${painting.title}`}>{painting.title}</button></h3>}
           {painting.size   && <p style={{ fontSize:"0.78rem", color:"var(--body)", letterSpacing:"0.08em", textTransform:"uppercase" }}>{painting.size}</p>}
           {painting.medium && <p style={{ fontSize:"0.78rem", color:"var(--gold)", letterSpacing:"0.08em", textTransform:"uppercase", marginTop:"0.15rem" }}>{painting.medium}</p>}
         </div>
       )}
+      {!painting.title && <button type="button" className="gallery-open" onClick={() => onClick(painting)} aria-label="Avaa maalaus"/>}
     </article>
   );
 }
@@ -555,27 +584,57 @@ function ContactForm() {
   const [form, setForm]     = useState({ name:"", email:"", message:"" });
   const [status, setStatus] = useState("idle"); // idle | sending | success | error
   const successRef          = useRef(null);
+  const requestRef = useRef(null);
+  const [error, setError] = useState("");
+
+  useEffect(() => () => {
+    if (requestRef.current) {
+      clearTimeout(requestRef.current.timeout);
+      requestRef.current.controller.abort();
+      requestRef.current = null;
+    }
+  }, []);
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.name.trim() || !form.message.trim()) return;
+    if (requestRef.current) return;
+    if (!form.name.trim() || !form.message.trim()) {
+      setError("Kirjoita nimi ja viesti. Pelkät välilyönnit eivät riitä.");
+      setStatus("error");
+      return;
+    }
+    setError("");
     setStatus("sending");
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 15000);
+    const request = { controller, timeout };
+    requestRef.current = request;
     try {
       const res = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
         method: "POST",
+        signal: controller.signal,
         headers: { "Content-Type": "application/json", "Accept": "application/json" },
         body: JSON.stringify({ name: form.name.trim(), email: form.email.trim(), message: form.message.trim() }),
       });
+      if (requestRef.current !== request) return;
       if (res.ok) {
         setStatus("success");
         setForm({ name:"", email:"", message:"" });
       } else {
+        setError("Viestiä ei voitu lähettää. Kokeile uudelleen tai lähetä sähköpostia suoraan.");
         setStatus("error");
       }
     } catch {
+      if (requestRef.current !== request) return;
+      setError(controller.signal.aborted
+        ? "Lähetys aikakatkaistiin. Viestin perillemenoa ei voitu vahvistaa. Kokeile uudelleen tai ota yhteyttä sähköpostitse."
+        : "Yhteys epäonnistui. Tarkista verkkoyhteys ja kokeile uudelleen.");
       setStatus("error");
+    } finally {
+      clearTimeout(timeout);
+      if (requestRef.current === request) requestRef.current = null;
     }
   };
 
@@ -618,9 +677,8 @@ function ContactForm() {
           onChange={handleChange} placeholder="Kerro mitä sinulla on mielessä — taulun osto, tilaustyö tai muu kysymys..."
           rows={5} maxLength={2000} required/>
       </div>
-      {status === "error" && (
-        <p style={{ color:"#e08080", fontSize:"0.88rem" }}>Jotain meni pieleen. Kokeile uudelleen tai lähetä sähköpostia suoraan.</p>
-      )}
+      <p role="alert" style={{ color:"#e08080", fontSize:"0.88rem" }}>{error}</p>
+      <p role="status">{status === "sending" ? "Lähetetään viestiä…" : ""}</p>
       <div style={{ display:"flex", justifyContent:"flex-end" }}>
         <button className="form-btn" type="submit" disabled={status==="sending"}>
           {status === "sending" ? "Lähetetään..." : "Lähetä viesti"}
@@ -786,7 +844,7 @@ function CustomPage({ setPage }) {
         <p style={{ color:"var(--body)", lineHeight:1.85, marginBottom:"1.25rem" }}>
           Ota yhteyttä ja kerro toiveistasi — sovitaan yksityiskohdat yhdessä.
         </p>
-        <button className="form-btn" onClick={() => setPage("contact")}>Ota yhteyttä</button>
+        <PageLink className="form-btn" page="contact" navigate={setPage}>Ota yhteyttä</PageLink>
       </div>
     </div>
   );
@@ -822,8 +880,9 @@ export default function App() {
   const [modal, setModal] = useState(null);
 
   const navigate = (id) => {
-    window.history.pushState({}, "", PATHS[id] ?? "/");
+    if (window.location.pathname !== PATHS[id]) window.history.pushState({}, "", PATHS[id] ?? "/");
     setPage(id);
+    window.scrollTo({ top: 0, behavior: "instant" });
   };
 
   useEffect(() => {
@@ -850,8 +909,8 @@ export default function App() {
         display:"flex", alignItems:"center", justifyContent:"space-between",
         padding:"0 2rem", height:64,
       }}>
-        <button onClick={() => navigate("home")}
-          style={{ background:"none", border:"none", cursor:"pointer", textAlign:"left" }}
+        <PageLink page="home" navigate={navigate}
+          style={{ textDecoration:"none", textAlign:"left" }}
           aria-label="Etusivulle">
           <div style={{ fontFamily:"var(--font-display)", fontSize:"1.45rem", fontWeight:400, color:"var(--cream)", letterSpacing:"0.1em", lineHeight:1 }}>
             Hakalahti
@@ -859,7 +918,7 @@ export default function App() {
           <div style={{ fontSize:"0.58rem", letterSpacing:"0.25em", textTransform:"uppercase", color:"var(--gold)", marginTop:"4px" }}>
             Öljymaalaukset
           </div>
-        </button>
+        </PageLink>
         <Nav page={page} setPage={navigate}/>
       </header>
 
