@@ -1,7 +1,27 @@
 import { useState, useEffect, useRef } from "react";
 
 const GLOBAL_CSS = `
-  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Raleway:wght@300;400;500&display=swap');
+  @font-face {
+    font-family: 'Cormorant Garamond';
+    font-style: normal;
+    font-weight: 300 700;
+    font-display: swap;
+    src: url('/fonts/cormorant-garamond-latin.woff2') format('woff2');
+  }
+  @font-face {
+    font-family: 'Cormorant Garamond';
+    font-style: italic;
+    font-weight: 300 700;
+    font-display: swap;
+    src: url('/fonts/cormorant-garamond-italic-latin.woff2') format('woff2');
+  }
+  @font-face {
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url('/fonts/raleway-latin.woff2') format('woff2');
+  }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -431,8 +451,9 @@ const ROUTES = {
   "/":             "home",
   "/tilaustyot":   "custom",
   "/yhteydenotot": "contact",
+  "/tietosuoja":   "privacy",
 };
-const PATHS = { home: "/", custom: "/tilaustyot", contact: "/yhteydenotot" };
+const PATHS = { home: "/", custom: "/tilaustyot", contact: "/yhteydenotot", privacy: "/tietosuoja" };
 function pathToPage(path) { return ROUTES[path] ?? "home"; }
 
 function PageLink({ page, navigate, children, onNavigate, ...props }) {
@@ -580,11 +601,14 @@ function SectionTitle({ children }) {
 
 const FORMSPREE_ID = "xdaplyop";
 
-function ContactForm() {
+const TEXT_LINK_STYLE = { color:"var(--gold)", textDecoration:"none", borderBottom:"1px solid rgba(180,155,90,0.4)" };
+
+function ContactForm({ navigate }) {
   const [form, setForm]     = useState({ name:"", email:"", message:"" });
   const [status, setStatus] = useState("idle"); // idle | sending | success | error
   const successRef          = useRef(null);
   const requestRef = useRef(null);
+  const honeypotRef = useRef(null);
   const [error, setError] = useState("");
 
   useEffect(() => () => {
@@ -616,7 +640,12 @@ function ContactForm() {
         method: "POST",
         signal: controller.signal,
         headers: { "Content-Type": "application/json", "Accept": "application/json" },
-        body: JSON.stringify({ name: form.name.trim(), email: form.email.trim(), message: form.message.trim() }),
+        body: JSON.stringify({
+          name: form.name.trim(),
+          email: form.email.trim(),
+          message: form.message.trim(),
+          _gotcha: honeypotRef.current?.value ?? "",
+        }),
       });
       if (requestRef.current !== request) return;
       if (res.ok) {
@@ -659,14 +688,14 @@ function ContactForm() {
             Nimi
           </label>
           <input id="contact-name" className="form-input" type="text" name="name" value={form.name}
-            onChange={handleChange} placeholder="Etunimi Sukunimi" autoComplete="name" required/>
+            onChange={handleChange} placeholder="Etunimi Sukunimi" autoComplete="name" maxLength={100} required/>
         </div>
         <div>
           <label htmlFor="contact-email" style={{ display:"block", fontSize:"0.68rem", letterSpacing:"0.2em", textTransform:"uppercase", color:"var(--gold)", marginBottom:"0.5rem" }}>
             Sähköposti
           </label>
           <input id="contact-email" className="form-input" type="email" name="email" value={form.email}
-            onChange={handleChange} placeholder="sinun@email.fi" autoComplete="email" required/>
+            onChange={handleChange} placeholder="sinun@email.fi" autoComplete="email" maxLength={254} required/>
         </div>
       </div>
       <div>
@@ -677,6 +706,13 @@ function ContactForm() {
           onChange={handleChange} placeholder="Kerro mitä sinulla on mielessä — taulun osto, tilaustyö tai muu kysymys..."
           rows={5} maxLength={2000} required/>
       </div>
+      <div aria-hidden="true" style={{ position:"absolute", left:"-9999px", width:1, height:1, overflow:"hidden" }}>
+        <label>Jätä tyhjäksi<input ref={honeypotRef} type="text" name="_gotcha" tabIndex={-1} autoComplete="off"/></label>
+      </div>
+      <p style={{ color:"var(--muted)", fontSize:"0.88rem" }}>
+        Lomakkeen tiedot välitetään Formspree-palvelun kautta, jotta yhteydenottoosi voidaan vastata.{" "}
+        <PageLink page="privacy" navigate={navigate} style={TEXT_LINK_STYLE}>Lue tietosuojaseloste</PageLink>.
+      </p>
       <p role="alert" style={{ color:"#e08080", fontSize:"0.88rem" }}>{error}</p>
       <p role="status">{status === "sending" ? "Lähetetään viestiä…" : ""}</p>
       <div style={{ display:"flex", justifyContent:"flex-end" }}>
@@ -850,7 +886,7 @@ function CustomPage({ setPage }) {
   );
 }
 
-function ContactPage() {
+function ContactPage({ navigate }) {
   useSEO({
     title: "Yhteydenotot – Hakalahti | Taulut Kempele",
     description: "Ota yhteyttä. Kysy tilausmaalauksia, taulujen hintoja tai lisätietoja.",
@@ -870,7 +906,123 @@ function ContactPage() {
           janne.hakalahti@gmail.com
         </a>
       </p>
-      <ContactForm/>
+      <ContactForm navigate={navigate}/>
+    </div>
+  );
+}
+
+function PrivacySection({ title, children }) {
+  return (
+    <section style={{ marginTop:"2.25rem" }}>
+      <h2 style={{ fontFamily:"var(--font-display)", fontSize:"1.35rem", fontWeight:400, color:"var(--cream)", marginBottom:"0.75rem", letterSpacing:"0.03em" }}>
+        {title}
+      </h2>
+      {children}
+    </section>
+  );
+}
+
+function PrivacyText({ children }) {
+  return <p style={{ color:"var(--body)", lineHeight:1.85, marginBottom:"1rem" }}>{children}</p>;
+}
+
+function PrivacyPage() {
+  useSEO({
+    title: "Tietosuojaseloste – Hakalahti",
+    description: "Tietosuojaseloste: miten yhteydenottolomakkeen ja sivuston käytön henkilötietoja käsitellään.",
+    keywords: "tietosuojaseloste, hakalahti",
+    canonical: "/tietosuoja",
+  });
+  return (
+    <div className="page-enter" style={{ maxWidth:680, margin:"0 auto", padding:"5rem 2rem 6rem" }}>
+      <h1 style={{ fontFamily:"var(--font-display)", fontSize:"clamp(1.8rem,5vw,2.4rem)", fontWeight:300, color:"var(--cream)", letterSpacing:"0.03em", lineHeight:1.15 }}>
+        Tietosuojaseloste
+      </h1>
+      <div style={{ width:48, height:1, background:"var(--gold)", margin:"1rem 0 0", opacity:0.7 }}/>
+
+      <PrivacySection title="Rekisterinpitäjä">
+        <PrivacyText>
+          Sivustolla esiteltyjen öljymaalausten myynnistä ja yhteydenottoihin vastaamisesta vastaa taidemaalari
+          Janne Hakalahti, Kempele. Hän on yhteydenottolomakkeen kautta tulevien henkilötietojen rekisterinpitäjä.
+          Sivustolla ei voi ostaa maalauksia, vaan ostoa koskevat asiat sovitaan ottamalla yhteyttä.
+        </PrivacyText>
+        <PrivacyText>
+          Tietosuoja-asioissa voit ottaa yhteyttä sähköpostitse:{" "}
+          <a href="mailto:janne.hakalahti@gmail.com" style={TEXT_LINK_STYLE}>janne.hakalahti@gmail.com</a>
+        </PrivacyText>
+      </PrivacySection>
+
+      <PrivacySection title="Yhteydenottolomake">
+        <PrivacyText>
+          Yhteydenottolomakkeella kerätään nimi, sähköpostiosoite ja viesti. Kaikki kolme kenttää ovat pakollisia,
+          koska vastaaminen ei onnistu ilman niitä. Voit halutessasi ottaa yhteyttä myös suoraan sähköpostilla.
+        </PrivacyText>
+        <PrivacyText>
+          Tietoja käytetään yhteydenottoosi vastaamiseen sekä tauluja ja tilaustöitä koskevan asian hoitamiseen.
+          Lomakkeessa on lisäksi piilotettu kenttä, jonka vain automaattiset roskapostiohjelmat täyttävät.
+          Ihmisen käyttäessä lomaketta kenttä jää tyhjäksi.
+        </PrivacyText>
+      </PrivacySection>
+
+      <PrivacySection title="Käsittelyn oikeusperuste">
+        <PrivacyText>
+          Kun kysyt maalauksen ostamisesta tai tilaustyöstä, tietojasi käsitellään, jotta pyyntösi voidaan hoitaa
+          ennen mahdollisen kaupan tekemistä (tietosuoja-asetuksen 6 artiklan 1 kohdan b alakohta). Muissa
+          kysymyksissä peruste on rekisterinpitäjän oikeutettu etu vastata saamiinsa viesteihin (6 artiklan 1 kohdan
+          f alakohta). Suostumusta ei pyydetä, koska käsittely ei perustu siihen.
+        </PrivacyText>
+      </PrivacySection>
+
+      <PrivacySection title="Lomakepalvelu ja tietojen vastaanottajat">
+        <PrivacyText>
+          Lomakkeen lähettämisen yhteydessä selaimesi lähettää tiedot suoraan Formspree-lomakepalvelulle,
+          joka välittää viestin sivuston ylläpitäjälle. Formspree kertoo omassa tietosuojakäytännössään käyttävänsä
+          teknistä infrastruktuuria Yhdysvalloissa. Formspree-tilin asetuksissa viestien tallennus Formspreen
+          arkistoon on pois päältä, joten viestit eivät jää sen arkistoon. Formspree voi silti käsitellä
+          lähetykseen liittyviä teknisiä lokitietoja omien käytäntöjensä mukaan.
+        </PrivacyText>
+        <PrivacyText>
+          Viesti toimitetaan rekisterinpitäjän sähköpostiin, joka on Googlen Gmail-palvelussa. Viestejä säilytetään
+          siellä 12 kuukautta viimeisestä yhteydenotosta, minkä jälkeen ne poistetaan.
+        </PrivacyText>
+      </PrivacySection>
+
+      <PrivacySection title="Sivuston ylläpito ja tekniset tiedot">
+        <PrivacyText>
+          Sivusto toimii Cloudflare-palvelun kautta. Sivua avattaessa Cloudflare käsittelee tavanomaisia teknisiä
+          tietoja, kuten IP-osoitetta, jotta sivusto saadaan toimitettua selaimellesi ja pidettyä turvallisena
+          (rekisterinpitäjän oikeutettu etu, tietosuoja-asetuksen 6 artiklan 1 kohdan f alakohta). Tietojen
+          säilytysaika määräytyy Cloudflaren omien käytäntöjen mukaan.
+        </PrivacyText>
+        <PrivacyText>
+          Cloudflare näyttää sivuston ylläpitäjälle myös yhteenvetotilastoja, kuten kävijämääriä. Ne lasketaan
+          palvelimella saapuneiden pyyntöjen perusteella (esimerkiksi IP-osoitteen mukaan) ilman selaimessasi
+          toimivaa seurantakoodia.
+        </PrivacyText>
+        <PrivacyText>
+          Cloudflare voi käsitellä tietoja myös EU:n ulkopuolella. Cloudflare ilmoittaa käyttävänsä siirroissa
+          EU:n ja Yhdysvaltojen välistä tietosuojakehystä (Data Privacy Framework) ja tarvittaessa EU:n
+          vakiosopimuslausekkeita.
+        </PrivacyText>
+      </PrivacySection>
+
+      <PrivacySection title="Evästeet ja seuranta">
+        <PrivacyText>
+          Sivusto ei aseta evästeitä, ei tallenna tietoja selaimesi muistiin eikä käytä selaimessa toimivaa analytiikka- tai mainontaseurantaa.
+        </PrivacyText>
+        <PrivacyText>
+          Sivuston fontit ja kuvat ladataan samalta palvelimelta kuin itse sivusto. Selaimesi ei ota yhteyttä
+          kolmansiin palveluihin sivua avattaessa. Poikkeus on lomakkeen lähettäminen Formspree-palvelulle.
+        </PrivacyText>
+      </PrivacySection>
+
+      <PrivacySection title="Rekisteröidyn oikeudet">
+        <PrivacyText>
+          Sinulla on oikeus pyytää pääsyä tietoihisi sekä niiden oikaisua tai poistamista. Voit myös pyytää käsittelyn
+          rajoittamista tai vastustaa käsittelyä. Jos katsot, että henkilötietojasi on käsitelty lainvastaisesti,
+          voit tehdä valituksen tietosuojavaltuutetun toimistolle (tietosuoja.fi).
+        </PrivacyText>
+      </PrivacySection>
     </div>
   );
 }
@@ -893,7 +1045,8 @@ export default function App() {
 
   const renderPage = () => {
     if (page === "custom")  return <CustomPage setPage={navigate}/>;
-    if (page === "contact") return <ContactPage/>;
+    if (page === "contact") return <ContactPage navigate={navigate}/>;
+    if (page === "privacy") return <PrivacyPage/>;
     return <HomePage setModal={setModal}/>;
   };
 
@@ -928,9 +1081,15 @@ export default function App() {
         <p style={{ fontSize:"0.72rem", letterSpacing:"0.15em", color:"var(--muted)", textTransform:"uppercase" }}>
           © Hakalahti — Öljymaalaukset, Kempele
         </p>
-        <p style={{ fontSize:"0.72rem", letterSpacing:"0.12em", color:"var(--muted)", textTransform:"uppercase" }}>
-          hakalahti.com
-        </p>
+        <nav aria-label="Alatunniste" style={{ display:"flex", flexWrap:"wrap", alignItems:"center", gap:"0.5rem 1.5rem" }}>
+          <PageLink page="privacy" navigate={navigate}
+            style={{ fontSize:"0.72rem", letterSpacing:"0.12em", color:"var(--muted)", textTransform:"uppercase", textDecoration:"underline", display:"inline-block", padding:"0.3rem 0" }}>
+            Tietosuojaseloste
+          </PageLink>
+          <span style={{ fontSize:"0.72rem", letterSpacing:"0.12em", color:"var(--muted)", textTransform:"uppercase" }}>
+            hakalahti.com
+          </span>
+        </nav>
       </footer>
 
       {modal && <Modal painting={modal} onClose={() => setModal(null)}/>}

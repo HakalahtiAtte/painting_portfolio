@@ -27,7 +27,7 @@ Built as a freelance project.
 
 - React 19
 - Vite
-- Deployed on Netlify with automatic GitHub deploys
+- Hosted on Cloudflare
 - Contact form via Formspree
 
 ## Local development
