@@ -1,332 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 
-const GLOBAL_CSS = `
-  @font-face {
-    font-family: 'Cormorant Garamond';
-    font-style: normal;
-    font-weight: 300 700;
-    font-display: swap;
-    src: url('/fonts/cormorant-garamond-latin.woff2') format('woff2');
-  }
-  @font-face {
-    font-family: 'Cormorant Garamond';
-    font-style: italic;
-    font-weight: 300 700;
-    font-display: swap;
-    src: url('/fonts/cormorant-garamond-italic-latin.woff2') format('woff2');
-  }
-  @font-face {
-    font-family: 'Raleway';
-    font-style: normal;
-    font-weight: 100 900;
-    font-display: swap;
-    src: url('/fonts/raleway-latin.woff2') format('woff2');
-  }
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  :root {
-    --black:   #0d0d0b;
-    --dark:    #1c1c19;
-    --mid:     #2a2a26;
-    --border:  rgba(255,255,255,0.12);
-    --cream:   #f0ece1;
-    --body:    #d4d0c4;
-    --muted:   #9a9488;
-    --gold:    #b49b5a;
-    --gold-lt: rgba(180,155,90,0.15);
-    --sold:    #7a3030;
-    --font-display: 'Cormorant Garamond', Georgia, serif;
-    --font-body:    'Raleway', sans-serif;
-  }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    background: var(--black);
-    color: var(--body);
-    font-family: var(--font-body);
-    font-weight: 400;
-    font-size: 1rem;
-    line-height: 1.7;
-    letter-spacing: 0.01em;
-    min-height: 100vh;
-  }
-
-  .forest-hero {
-    position: relative;
-    overflow: hidden;
-    background: var(--black);
-  }
-  .forest-hero::before {
-    content: '';
-    position: absolute; inset: 0;
-    background:
-      radial-gradient(ellipse 80% 60% at 50% 100%, rgba(30,38,25,0.9) 0%, transparent 70%),
-      linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.7) 100%);
-    z-index: 1;
-  }
-  .forest-hero > * { position: relative; z-index: 2; }
-
-  /* Gallery card */
-  .gallery-card {
-    position: relative;
-    cursor: pointer;
-    outline: none;
-    border: 1px solid var(--border);
-    background: var(--dark);
-    transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
-  }
-  .gallery-open { background: none; border: 0; color: inherit; font: inherit; text-align: inherit; cursor: pointer; }
-  .gallery-open::after { content: ''; position: absolute; inset: 0; }
-  .gallery-card:focus-within { outline: 2px solid var(--gold); outline-offset: 3px; }
-  a.nav-btn, a.form-btn { display: inline-block; text-decoration: none; }
-  a:focus-visible, button:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
-  .gallery-card:hover, .gallery-card:focus-visible {
-    border-color: var(--gold);
-    transform: translateY(-4px);
-    box-shadow: 0 12px 40px rgba(0,0,0,0.6), 0 0 0 1px var(--gold);
-  }
-  .gallery-card img {
-    transition: transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94), filter 0.4s;
-    filter: grayscale(15%);
-  }
-  .gallery-card:hover img, .gallery-card:focus-visible img {
-    transform: scale(1.04);
-    filter: grayscale(0%);
-  }
-
-  /* Nav */
-  .nav-btn {
-    background: none; border: none; cursor: pointer;
-    font-family: var(--font-body);
-    font-weight: 400;
-    font-size: 0.75rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--muted);
-    padding: 0.5rem 1rem;
-    transition: color 0.2s;
-    position: relative;
-  }
-  .nav-btn::after {
-    content: '';
-    position: absolute;
-    bottom: 0; left: 1rem; right: 1rem;
-    height: 1px;
-    background: var(--gold);
-    transform: scaleX(0);
-    transition: transform 0.25s;
-  }
-  .nav-btn:hover { color: var(--cream); }
-  .nav-btn:hover::after { transform: scaleX(1); }
-  .nav-btn.active { color: var(--gold); }
-  .nav-btn.active::after { transform: scaleX(1); }
-
-  /* Modal */
-  .modal-overlay {
-    width: 100%; height: 100%; max-width: none; max-height: none; border: 0; color: inherit;
-    position: fixed; inset: 0;
-    background: rgba(5,5,4,0.96);
-    z-index: 1000;
-    display: flex; align-items: center; justify-content: center;
-    padding: 1rem;
-    animation: fadeIn 0.2s ease;
-  }
-  .modal-overlay:not([open]) { display: none; }
-  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-  .modal-img { animation: scaleIn 0.25s ease; }
-  @keyframes scaleIn { from { transform: scale(0.96); opacity:0; } to { transform: scale(1); opacity:1; } }
-
-  .page-enter { animation: pageEnter 0.4s ease both; }
-  @keyframes pageEnter {
-    from { opacity: 0; transform: translateY(12px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  .gold-rule { border: none; border-top: 1px solid var(--gold); opacity: 0.3; margin: 0; }
-
-  .sold-badge {
-    position: absolute; top: 10px; right: 10px;
-    background: var(--sold); color: #f0c8c8;
-    font-family: var(--font-body);
-    font-size: 0.62rem; letter-spacing: 0.18em;
-    text-transform: uppercase; padding: 3px 10px;
-  }
-
-  .ba-img {
-    width: 100%; display: block;
-    border: 1px solid var(--border);
-    transition: border-color 0.3s, box-shadow 0.3s;
-    cursor: pointer;
-  }
-  .ba-img:hover { border-color: var(--gold); box-shadow: 0 8px 30px rgba(0,0,0,0.5); }
-
-  /* Contact form inputs */
-  .form-input {
-    width: 100%;
-    background: var(--dark);
-    border: 1px solid var(--border);
-    color: var(--cream);
-    font-family: var(--font-body);
-    font-size: 0.95rem;
-    font-weight: 400;
-    padding: 0.85rem 1rem;
-    outline: none;
-    transition: border-color 0.2s;
-    resize: none;
-  }
-  .form-input::placeholder { color: var(--muted); }
-  .form-input:focus { border-color: var(--gold); }
-
-  .form-btn {
-    background: var(--gold);
-    border: none;
-    color: #0d0d0b;
-    font-family: var(--font-body);
-    font-size: 0.75rem;
-    font-weight: 500;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    padding: 1rem 2.5rem;
-    cursor: pointer;
-    transition: background 0.2s, transform 0.15s;
-  }
-  .form-btn:hover { background: #c4ac6a; transform: translateY(-1px); }
-  .form-btn:disabled { background: var(--mid); color: var(--muted); cursor: not-allowed; transform: none; }
-
-  .form-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
-  @media (min-width: 540px) { .form-grid { grid-template-columns: 1fr 1fr; } }
-
-  ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { background: var(--black); }
-  ::-webkit-scrollbar-thumb { background: var(--mid); border-radius: 3px; }
-
-  /* Hamburger — hidden on desktop, shown on mobile */
-  .hamburger {
-    display: none;
-    background: none; border: none; cursor: pointer;
-    padding: 0.5rem; flex-direction: column; justify-content: center;
-  }
-  .nav-desktop { display: flex; gap: 0.25rem; align-items: center; }
-  .nav-mobile-menu {
-    position: absolute; top: 64px; right: 0;
-    background: rgba(13,13,11,0.97);
-    border: 1px solid var(--border);
-    min-width: 200px;
-    z-index: 200;
-    backdrop-filter: blur(12px);
-  }
-
-  @media (max-width: 600px) {
-    .hamburger { display: flex; }
-    .nav-desktop { display: none; }
-  }
-
-  /* About section — stack on mobile */
-  @media (max-width: 600px) {
-    .about-section { flex-direction: column; align-items: center; text-align: center; gap: 1.5rem !important; }
-    .about-img { width: 140px !important; height: 140px !important; }
-  }
-
-  /* CustomPage grid — stack on mobile */
-  @media (max-width: 640px) {
-    .custom-grid { grid-template-columns: 1fr !important; }
-  }
-
-  /* Before/After drag slider */
-  .ba-slider {
-    position: relative;
-    overflow: hidden;
-    cursor: ew-resize;
-    user-select: none;
-    touch-action: none;
-    border: 1px solid var(--border);
-    transition: border-color 0.3s;
-  }
-  .ba-slider:hover { border-color: var(--gold); }
-  .ba-slider img { display: block; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
-  .ba-handle {
-    position: absolute; top: 0; bottom: 0;
-    width: 2px; background: var(--gold);
-    transform: translateX(-50%);
-    cursor: ew-resize;
-  }
-  .ba-handle-circle {
-    position: absolute; top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    width: 44px; height: 44px;
-    border-radius: 50%;
-    background: var(--gold);
-    display: flex; align-items: center; justify-content: center;
-    color: #0d0d0b;
-    font-size: 1rem;
-    font-weight: 600;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.5);
-  }
-  .ba-label {
-    position: absolute; bottom: 12px;
-    font-family: var(--font-body);
-    font-size: 0.62rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    padding: 4px 10px;
-    background: rgba(13,13,11,0.75);
-    color: var(--gold);
-    pointer-events: none;
-  }
-
-  /* Atelier curtain reveal */
-  .curtain {
-    position: absolute; top: 0; bottom: 0;
-    width: 50%; z-index: 10; pointer-events: none;
-  }
-  .curtain-left {
-    left: 0;
-    background:
-      linear-gradient(to right, rgba(0,0,0,0.4) 0%, transparent 50%),
-      repeating-linear-gradient(180deg, transparent 0px, transparent 14px, rgba(0,0,0,0.07) 14px, rgba(0,0,0,0.07) 15px),
-      linear-gradient(170deg, #3a1212 0%, #1e0808 25%, #2d1010 50%, #1e0808 75%, #3a1212 100%);
-    border-right: 2px solid rgba(180,155,90,0.55);
-    box-shadow: inset -16px 0 32px rgba(0,0,0,0.55);
-    animation: curtainLeft 0.95s cubic-bezier(0.4,0,0.6,1) forwards;
-  }
-  .curtain-right {
-    right: 0;
-    background:
-      linear-gradient(to left, rgba(0,0,0,0.4) 0%, transparent 50%),
-      repeating-linear-gradient(180deg, transparent 0px, transparent 14px, rgba(0,0,0,0.07) 14px, rgba(0,0,0,0.07) 15px),
-      linear-gradient(190deg, #3a1212 0%, #1e0808 25%, #2d1010 50%, #1e0808 75%, #3a1212 100%);
-    border-left: 2px solid rgba(180,155,90,0.55);
-    box-shadow: inset 16px 0 32px rgba(0,0,0,0.55);
-    animation: curtainRight 0.95s cubic-bezier(0.4,0,0.6,1) forwards;
-  }
-  @keyframes curtainLeft {
-    from { transform: translateX(0); }
-    to   { transform: translateX(-100%); }
-  }
-  @keyframes curtainRight {
-    from { transform: translateX(0); }
-    to   { transform: translateX(100%); }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    html { scroll-behavior: auto; }
-    *, *::before, *::after { animation: none !important; transition: none !important; }
-    .curtain { display: none; }
-    .gallery-card:hover, .gallery-card:focus-visible, .gallery-card:hover img,
-    .gallery-card:focus-visible img, .form-btn:hover { transform: none; }
-  }
-`;
-
-function GlobalStyles() {
-  useEffect(() => {
-    const el = document.createElement("style");
-    el.textContent = GLOBAL_CSS;
-    document.head.appendChild(el);
-    return () => document.head.removeChild(el);
-  }, []);
-  return null;
-}
 
 // SEO
 const SITE_URL = "https://www.hakalahti.com";
@@ -599,130 +274,7 @@ function SectionTitle({ children }) {
   );
 }
 
-const FORMSPREE_ID = "xdaplyop";
-
-const TEXT_LINK_STYLE = { color:"var(--gold)", textDecoration:"none", borderBottom:"1px solid rgba(180,155,90,0.4)" };
-
-function ContactForm({ navigate }) {
-  const [form, setForm]     = useState({ name:"", email:"", message:"" });
-  const [status, setStatus] = useState("idle"); // idle | sending | success | error
-  const successRef          = useRef(null);
-  const requestRef = useRef(null);
-  const honeypotRef = useRef(null);
-  const [error, setError] = useState("");
-
-  useEffect(() => () => {
-    if (requestRef.current) {
-      clearTimeout(requestRef.current.timeout);
-      requestRef.current.controller.abort();
-      requestRef.current = null;
-    }
-  }, []);
-
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (requestRef.current) return;
-    if (!form.name.trim() || !form.message.trim()) {
-      setError("Kirjoita nimi ja viesti. Pelkät välilyönnit eivät riitä.");
-      setStatus("error");
-      return;
-    }
-    setError("");
-    setStatus("sending");
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 15000);
-    const request = { controller, timeout };
-    requestRef.current = request;
-    try {
-      const res = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
-        method: "POST",
-        signal: controller.signal,
-        headers: { "Content-Type": "application/json", "Accept": "application/json" },
-        body: JSON.stringify({
-          name: form.name.trim(),
-          email: form.email.trim(),
-          message: form.message.trim(),
-          _gotcha: honeypotRef.current?.value ?? "",
-        }),
-      });
-      if (requestRef.current !== request) return;
-      if (res.ok) {
-        setStatus("success");
-        setForm({ name:"", email:"", message:"" });
-      } else {
-        setError("Viestiä ei voitu lähettää. Kokeile uudelleen tai lähetä sähköpostia suoraan.");
-        setStatus("error");
-      }
-    } catch {
-      if (requestRef.current !== request) return;
-      setError(controller.signal.aborted
-        ? "Lähetys aikakatkaistiin. Viestin perillemenoa ei voitu vahvistaa. Kokeile uudelleen tai ota yhteyttä sähköpostitse."
-        : "Yhteys epäonnistui. Tarkista verkkoyhteys ja kokeile uudelleen.");
-      setStatus("error");
-    } finally {
-      clearTimeout(timeout);
-      if (requestRef.current === request) requestRef.current = null;
-    }
-  };
-
-  useEffect(() => {
-    if (status === "success" && successRef.current) successRef.current.focus();
-  }, [status]);
-
-  if (status === "success") {
-    return (
-      <div ref={successRef} tabIndex={-1} style={{ padding:"2rem", border:"1px solid var(--gold)", background:"var(--dark)", textAlign:"center" }}>
-        <p style={{ fontSize:"0.68rem", letterSpacing:"0.28em", textTransform:"uppercase", color:"var(--gold)", marginBottom:"0.75rem" }}>Viesti lähetetty</p>
-        <p style={{ color:"var(--cream)", fontFamily:"var(--font-display)", fontSize:"1.3rem", fontWeight:300 }}>Kiitos! Vastaan mahdollisimman pian.</p>
-      </div>
-    );
-  }
-
-  return (
-    <form onSubmit={handleSubmit} style={{ display:"flex", flexDirection:"column", gap:"1rem" }}>
-      <div className="form-grid">
-        <div>
-          <label htmlFor="contact-name" style={{ display:"block", fontSize:"0.68rem", letterSpacing:"0.2em", textTransform:"uppercase", color:"var(--gold)", marginBottom:"0.5rem" }}>
-            Nimi
-          </label>
-          <input id="contact-name" className="form-input" type="text" name="name" value={form.name}
-            onChange={handleChange} placeholder="Etunimi Sukunimi" autoComplete="name" maxLength={100} required/>
-        </div>
-        <div>
-          <label htmlFor="contact-email" style={{ display:"block", fontSize:"0.68rem", letterSpacing:"0.2em", textTransform:"uppercase", color:"var(--gold)", marginBottom:"0.5rem" }}>
-            Sähköposti
-          </label>
-          <input id="contact-email" className="form-input" type="email" name="email" value={form.email}
-            onChange={handleChange} placeholder="sinun@email.fi" autoComplete="email" maxLength={254} required/>
-        </div>
-      </div>
-      <div>
-        <label htmlFor="contact-message" style={{ display:"block", fontSize:"0.68rem", letterSpacing:"0.2em", textTransform:"uppercase", color:"var(--gold)", marginBottom:"0.5rem" }}>
-          Viesti
-        </label>
-        <textarea id="contact-message" className="form-input" name="message" value={form.message}
-          onChange={handleChange} placeholder="Kerro mitä sinulla on mielessä — taulun osto, tilaustyö tai muu kysymys..."
-          rows={5} maxLength={2000} required/>
-      </div>
-      <div aria-hidden="true" style={{ position:"absolute", left:"-9999px", width:1, height:1, overflow:"hidden" }}>
-        <label>Jätä tyhjäksi<input ref={honeypotRef} type="text" name="_gotcha" tabIndex={-1} autoComplete="off"/></label>
-      </div>
-      <p style={{ color:"var(--muted)", fontSize:"0.88rem" }}>
-        Lomakkeen tiedot välitetään Formspree-palvelun kautta, jotta yhteydenottoosi voidaan vastata.{" "}
-        <PageLink page="privacy" navigate={navigate} style={TEXT_LINK_STYLE}>Lue tietosuojaseloste</PageLink>.
-      </p>
-      <p role="alert" style={{ color:"#e08080", fontSize:"0.88rem" }}>{error}</p>
-      <p role="status">{status === "sending" ? "Lähetetään viestiä…" : ""}</p>
-      <div style={{ display:"flex", justifyContent:"flex-end" }}>
-        <button className="form-btn" type="submit" disabled={status==="sending"}>
-          {status === "sending" ? "Lähetetään..." : "Lähetä viesti"}
-        </button>
-      </div>
-    </form>
-  );
-}
+const TEXT_LINK_STYLE = { color:"var(--gold)", textDecoration:"underline", overflowWrap:"anywhere" };
 
 function HomePage({ setModal }) {
   useSEO({
@@ -900,13 +452,19 @@ function ContactPage({ navigate }) {
         Kiinnostuitko tauluista tai tilaustöistä?
       </h1>
       <p style={{ color:"var(--body)", marginBottom:"2.5rem" }}>
-        Täytä lomake tai lähetä sähköpostia suoraan —{" "}
+        Kysy taulujen hinnoista tai kerro toiveesi sähköpostitse:{" "}
         <a href="mailto:janne.hakalahti@gmail.com"
-          style={{ color:"var(--gold)", textDecoration:"none", borderBottom:"1px solid rgba(180,155,90,0.4)" }}>
+          style={TEXT_LINK_STYLE}>
           janne.hakalahti@gmail.com
         </a>
       </p>
-      <ContactForm navigate={navigate}/>
+      <a className="form-btn" href="mailto:janne.hakalahti@gmail.com">Lähetä sähköpostia</a>
+      <p style={{ color:"var(--muted)", marginTop:"1rem", lineHeight:1.7 }}>
+        Linkki avaa sähköpostiohjelmasi. Voit myös kopioida yllä olevan osoitteen.
+      </p>
+      <p style={{ marginTop:"1.5rem" }}>
+        <PageLink page="privacy" navigate={navigate} style={TEXT_LINK_STYLE}>Tietosuojaseloste</PageLink>
+      </p>
     </div>
   );
 }
@@ -929,7 +487,7 @@ function PrivacyText({ children }) {
 function PrivacyPage() {
   useSEO({
     title: "Tietosuojaseloste – Hakalahti",
-    description: "Tietosuojaseloste: miten yhteydenottolomakkeen ja sivuston käytön henkilötietoja käsitellään.",
+    description: "Näin sähköpostiviestejä ja sivuston teknisiä tietoja käsitellään.",
     keywords: "tietosuojaseloste, hakalahti",
     canonical: "/tietosuoja",
   });
@@ -940,87 +498,58 @@ function PrivacyPage() {
       </h1>
       <div style={{ width:48, height:1, background:"var(--gold)", margin:"1rem 0 0", opacity:0.7 }}/>
 
-      <PrivacySection title="Rekisterinpitäjä">
+      <PrivacySection title="Kuka vastaa tiedoistasi?">
         <PrivacyText>
-          Sivustolla esiteltyjen öljymaalausten myynnistä ja yhteydenottoihin vastaamisesta vastaa taidemaalari
-          Janne Hakalahti, Kempele. Hän on yhteydenottolomakkeen kautta tulevien henkilötietojen rekisterinpitäjä.
-          Sivustolla ei voi ostaa maalauksia, vaan ostoa koskevat asiat sovitaan ottamalla yhteyttä.
-        </PrivacyText>
-        <PrivacyText>
-          Tietosuoja-asioissa voit ottaa yhteyttä sähköpostitse:{" "}
-          <a href="mailto:janne.hakalahti@gmail.com" style={TEXT_LINK_STYLE}>janne.hakalahti@gmail.com</a>
+          Rekisterinpitäjä on taidemaalari Janne Hakalahti, Kempele.
+          Yhteydenotot ja tietosuoja-asiat:{" "}
+          <a href="mailto:janne.hakalahti@gmail.com" style={TEXT_LINK_STYLE}>janne.hakalahti@gmail.com</a>.
         </PrivacyText>
       </PrivacySection>
 
-      <PrivacySection title="Yhteydenottolomake">
+      <PrivacySection title="Kun lähetät sähköpostia">
         <PrivacyText>
-          Yhteydenottolomakkeella kerätään nimi, sähköpostiosoite ja viesti. Kaikki kolme kenttää ovat pakollisia,
-          koska vastaaminen ei onnistu ilman niitä. Voit halutessasi ottaa yhteyttä myös suoraan sähköpostilla.
-        </PrivacyText>
-        <PrivacyText>
-          Tietoja käytetään yhteydenottoosi vastaamiseen sekä tauluja ja tilaustöitä koskevan asian hoitamiseen.
-          Lomakkeessa on lisäksi piilotettu kenttä, jonka vain automaattiset roskapostiohjelmat täyttävät.
-          Ihmisen käyttäessä lomaketta kenttä jää tyhjäksi.
-        </PrivacyText>
-      </PrivacySection>
-
-      <PrivacySection title="Käsittelyn oikeusperuste">
-        <PrivacyText>
-          Kun kysyt maalauksen ostamisesta tai tilaustyöstä, tietojasi käsitellään, jotta pyyntösi voidaan hoitaa
-          ennen mahdollisen kaupan tekemistä (tietosuoja-asetuksen 6 artiklan 1 kohdan b alakohta). Muissa
-          kysymyksissä peruste on rekisterinpitäjän oikeutettu etu vastata saamiinsa viesteihin (6 artiklan 1 kohdan
-          f alakohta). Suostumusta ei pyydetä, koska käsittely ei perustu siihen.
+          Jos otat yhteyttä sähköpostitse, Janne käyttää sähköpostiosoitettasi, mahdollista nimeäsi ja viestisi tietoja vastaamiseen.
+          Osto- ja tilaustyökyselyissä peruste on sopimusta edeltävien toimien tekeminen pyynnöstäsi;
+          muissa kysymyksissä oikeutettu etu vastata yhteydenottoihin.
+          Viestit käsitellään Gmailissa. Yhteydenottoon liittyviä viestejä säilytetään asian ja siihen
+          liittyvien jatkokysymysten käsittelyn ajan. Viestit poistetaan, kun niitä ei enää tarvita näihin tarkoituksiin.
+          Toteutuneisiin kauppoihin liittyviä tietoja voidaan säilyttää pidempään siltä osin kuin se on tarpeen
+          lakisääteisten velvoitteiden täyttämiseksi tai kauppaan liittyvien oikeusvaateiden selvittämiseksi.
+          Yhteydenotto on vapaaehtoista, mutta vastaaminen edellyttää toimivaa sähköpostiosoitetta.
         </PrivacyText>
       </PrivacySection>
 
-      <PrivacySection title="Lomakepalvelu ja tietojen vastaanottajat">
+      <PrivacySection title="Sivuston käyttö">
         <PrivacyText>
-          Lomakkeen lähettämisen yhteydessä selaimesi lähettää tiedot suoraan Formspree-lomakepalvelulle,
-          joka välittää viestin sivuston ylläpitäjälle. Formspree kertoo omassa tietosuojakäytännössään käyttävänsä
-          teknistä infrastruktuuria Yhdysvalloissa. Formspree-tilin asetuksissa viestien tallennus Formspreen
-          arkistoon on pois päältä, joten viestit eivät jää sen arkistoon. Formspree voi silti käsitellä
-          lähetykseen liittyviä teknisiä lokitietoja omien käytäntöjensä mukaan.
-        </PrivacyText>
-        <PrivacyText>
-          Viesti toimitetaan rekisterinpitäjän sähköpostiin, joka on Googlen Gmail-palvelussa. Viestejä säilytetään
-          siellä 12 kuukautta viimeisestä yhteydenotosta, minkä jälkeen ne poistetaan.
+          Sivustolla ei ole yhteydenottolomaketta, evästeitä eikä selaimessa toimivaa seurantaa.
+          Fontit ja kuvat ladataan sivustolta.
+          Sivuston välittävä Cloudflare käsittelee teknisiä tietoja, kuten IP-osoitteita, sivuston
+          toimittamiseksi ja suojaamiseksi. Peruste on oikeutettu etu pitää sivusto toimivana ja turvallisena.
+          Janne näkee palvelinpyyntöihin perustuvia yhteenvetotilastoja. Sivustolla ei tehdä profilointia eikä automaattisia päätöksiä.
+          Teknisten tietojen säilytys määräytyy Cloudflaren käytäntöjen mukaan.
         </PrivacyText>
       </PrivacySection>
 
-      <PrivacySection title="Sivuston ylläpito ja tekniset tiedot">
+      <PrivacySection title="Palveluntarjoajat">
         <PrivacyText>
-          Sivusto toimii Cloudflare-palvelun kautta. Sivua avattaessa Cloudflare käsittelee tavanomaisia teknisiä
-          tietoja, kuten IP-osoitetta, jotta sivusto saadaan toimitettua selaimellesi ja pidettyä turvallisena
-          (rekisterinpitäjän oikeutettu etu, tietosuoja-asetuksen 6 artiklan 1 kohdan f alakohta). Tietojen
-          säilytysaika määräytyy Cloudflaren omien käytäntöjen mukaan.
-        </PrivacyText>
-        <PrivacyText>
-          Cloudflare näyttää sivuston ylläpitäjälle myös yhteenvetotilastoja, kuten kävijämääriä. Ne lasketaan
-          palvelimella saapuneiden pyyntöjen perusteella (esimerkiksi IP-osoitteen mukaan) ilman selaimessasi
-          toimivaa seurantakoodia.
-        </PrivacyText>
-        <PrivacyText>
-          Cloudflare voi käsitellä tietoja myös EU:n ulkopuolella. Cloudflare ilmoittaa käyttävänsä siirroissa
-          EU:n ja Yhdysvaltojen välistä tietosuojakehystä (Data Privacy Framework) ja tarvittaessa EU:n
-          vakiosopimuslausekkeita.
+          Google ja Cloudflare voivat käsitellä tietoja myös EU:n ja ETA:n ulkopuolella.
+          Ne kertovat käyttävänsä siirtojen suojana muun muassa EU:n ja Yhdysvaltojen
+          tietosuojakehystä ja vakiosopimuslausekkeita. Lisätietoja käsittelystä ja suojatoimista:{" "}
+          <a href="https://policies.google.com/privacy?hl=fi" style={TEXT_LINK_STYLE}>Googlen tietosuojakäytäntö</a>
+          {" "}ja{" "}
+          <a href="https://www.cloudflare.com/privacypolicy/" style={TEXT_LINK_STYLE}>Cloudflaren tietosuojakäytäntö</a>.
         </PrivacyText>
       </PrivacySection>
 
-      <PrivacySection title="Evästeet ja seuranta">
+      <PrivacySection title="Oikeutesi">
         <PrivacyText>
-          Sivusto ei aseta evästeitä, ei tallenna tietoja selaimesi muistiin eikä käytä selaimessa toimivaa analytiikka- tai mainontaseurantaa.
-        </PrivacyText>
-        <PrivacyText>
-          Sivuston fontit ja kuvat ladataan samalta palvelimelta kuin itse sivusto. Selaimesi ei ota yhteyttä
-          kolmansiin palveluihin sivua avattaessa. Poikkeus on lomakkeen lähettäminen Formspree-palvelulle.
-        </PrivacyText>
-      </PrivacySection>
-
-      <PrivacySection title="Rekisteröidyn oikeudet">
-        <PrivacyText>
-          Sinulla on oikeus pyytää pääsyä tietoihisi sekä niiden oikaisua tai poistamista. Voit myös pyytää käsittelyn
-          rajoittamista tai vastustaa käsittelyä. Jos katsot, että henkilötietojasi on käsitelty lainvastaisesti,
-          voit tehdä valituksen tietosuojavaltuutetun toimistolle (tietosuoja.fi).
+          Voit pyytää tietojesi tarkastamista, oikaisua tai poistamista ottamalla yhteyttä Janneen.
+          Voit myös pyytää käsittelyn rajoittamista, vastustaa oikeutettuun etuun perustuvaa käsittelyä
+          ja pyytää tietojen siirtämistä soveltuvin osin. Pyyntöihin vastataan yleensä kuukauden kuluessa.
+          Pelkkää sivukäyntiä ei välttämättä voida yhdistää sinuun. Jos tietojasi ei pystytä tunnistamaan,
+          siitä kerrotaan sinulle. Tarvittaessa teknisiä tietoja selvitetään Cloudflaren kanssa.
+          Jos epäilet tietojesi lainvastaista käsittelyä, voit tehdä valituksen{" "}
+          <a href="https://tietosuoja.fi" style={TEXT_LINK_STYLE}>tietosuojavaltuutetun toimistolle</a>.
         </PrivacyText>
       </PrivacySection>
     </div>
@@ -1052,7 +581,7 @@ export default function App() {
 
   return (
     <>
-      <GlobalStyles/>
+
 
       <header style={{
         position:"sticky", top:0, zIndex:100,

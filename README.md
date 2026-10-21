@@ -9,7 +9,7 @@ Built as a freelance project.
 
 - Painting gallery with modal lightbox
 - Age-gated figurative art section with animated curtain reveal
-- Contact form (Formspree)
+- Direct email contact
 - Fully responsive design
 - Dark gallery aesthetic with SVG forest hero
 
@@ -28,7 +28,7 @@ Built as a freelance project.
 - React 19
 - Vite
 - Hosted on Cloudflare
-- Contact form via Formspree
+- Contact via email (no form service)
 
 ## Local development
 
