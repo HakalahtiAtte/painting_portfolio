@@ -32,8 +32,12 @@ Built as a freelance project.
 
 ## Local development
 
+Use Node.js 22.23.4 or a newer patched 22.x release. The version in
+`.node-version` selects the Cloudflare Pages build runtime; `.npmrc` rejects
+dependency installation with an unsupported Node version.
+
 ```bash
-npm install
+npm ci
 npm run dev
 ```
 
@@ -42,6 +46,11 @@ npm run dev
 ```bash
 npm run build
 ```
+
+Deploy the generated `dist` directory as static files. PHP and a Node.js
+application server are not needed to serve this site. In Cloudflare Pages,
+remove any older `NODE_VERSION` override or set it to match `.node-version`
+for production and preview builds. Confirm the version in the next build log.
 
 ## Image optimisation
 
