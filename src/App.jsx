@@ -499,10 +499,11 @@ function PrivacyPage() {
         Tietosuojaseloste
       </h1>
       <div style={{ width:48, height:1, background:"var(--gold)", margin:"1rem 0 0", opacity:0.7 }}/>
+      <p style={{ color:"var(--muted)", fontSize:"0.85rem", marginTop:"1rem" }}>Päivitetty 15.11.2026</p>
 
       <PrivacySection title="Kuka vastaa tiedoistasi?">
         <PrivacyText>
-          Rekisterinpitäjä on taidemaalari Janne Hakalahti, Kempele.
+          Rekisterinpitäjä on Janne Hakalahti (toiminimi), Y-tunnus 3305159-2, Kempele.
           Yhteydenotot ja tietosuoja-asiat:{" "}
           <a href="mailto:janne.hakalahti@gmail.com" style={TEXT_LINK_STYLE}>janne.hakalahti@gmail.com</a>.
         </PrivacyText>
@@ -513,8 +514,8 @@ function PrivacyPage() {
           Jos otat yhteyttä sähköpostitse, Janne käyttää sähköpostiosoitettasi, mahdollista nimeäsi ja viestisi tietoja vastaamiseen.
           Osto- ja tilaustyökyselyissä peruste on sopimusta edeltävien toimien tekeminen pyynnöstäsi;
           muissa kysymyksissä oikeutettu etu vastata yhteydenottoihin.
-          Viestit käsitellään Gmailissa. Yhteydenottoon liittyviä viestejä säilytetään asian ja siihen
-          liittyvien jatkokysymysten käsittelyn ajan. Viestit poistetaan, kun niitä ei enää tarvita näihin tarkoituksiin.
+          Viestit käsitellään Gmailissa. Yhteydenottoon liittyviä viestejä säilytetään
+          12 kuukautta viimeisestä yhteydenotosta, minkä jälkeen ne poistetaan.
           Toteutuneisiin kauppoihin liittyviä tietoja voidaan säilyttää pidempään siltä osin kuin se on tarpeen
           lakisääteisten velvoitteiden täyttämiseksi tai kauppaan liittyvien oikeusvaateiden selvittämiseksi.
           Yhteydenotto on vapaaehtoista, mutta vastaaminen edellyttää toimivaa sähköpostiosoitetta.
@@ -610,7 +611,7 @@ export default function App() {
 
       <footer style={{ borderTop:"1px solid var(--border)", padding:"2.5rem 2rem", display:"flex", justifyContent:"space-between", alignItems:"center", flexWrap:"wrap", gap:"1rem" }}>
         <p style={{ fontSize:"0.72rem", letterSpacing:"0.15em", color:"var(--muted)", textTransform:"uppercase" }}>
-          © Hakalahti — Öljymaalaukset, Kempele
+          © Janne Hakalahti — Öljymaalaukset, Kempele · Y-tunnus 3305159-2
         </p>
         <nav aria-label="Alatunniste" style={{ display:"flex", flexWrap:"wrap", alignItems:"center", gap:"0.5rem 1.5rem" }}>
           <PageLink page="privacy" navigate={navigate}
