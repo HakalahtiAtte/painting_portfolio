@@ -527,7 +527,7 @@ function PrivacyPage() {
           Fontit ja kuvat ladataan sivustolta.
           Sivuston välittävä Cloudflare käsittelee teknisiä tietoja, kuten IP-osoitteita, sivuston
           toimittamiseksi ja suojaamiseksi. Peruste on oikeutettu etu pitää sivusto toimivana ja turvallisena.
-          Janne näkee palvelinpyyntöihin perustuvia yhteenvetotilastoja. Sivustolla ei tehdä profilointia eikä automaattisia päätöksiä.
+          Sivuston teknisestä ylläpidosta vastaa Jannen puolesta sivuston ylläpitäjä, joka voi nähdä palvelinpyyntöihin perustuvia yhteenvetotilastoja. Sivustolla ei tehdä profilointia eikä automaattisia päätöksiä.
           Teknisten tietojen säilytys määräytyy Cloudflaren käytäntöjen mukaan.
         </PrivacyText>
       </PrivacySection>
