@@ -76,6 +76,7 @@ const PAINTINGS = [
   { id: "taulu48", src: "images/taulu48.webp", title: "Näkymä Rastilammelle",   size: "65×85cm",  medium: "Öljymaalaus" },
   { id: "taulu49", src: "images/taulu49.webp", title: "Haastaja",               size: "130×88cm", medium: "Öljymaalaus" },
   { id: "taulu50", src: "images/taulu50.webp", title: "Lento",                  size: "88×130cm", medium: "Öljymaalaus" },
+  { id: "taulu51", src: "images/taulu51.webp", title: "Kukkoilijat",            size: "130×88cm", medium: "Öljymaalaus" },
 ];
 
 const NUDE_PAINTINGS = [
