@@ -126,11 +126,12 @@ function ForestSVG() {
 
 const ROUTES = {
   "/":             "home",
+  "/inspiraatio":  "inspiration",
   "/tilaustyot":   "custom",
   "/yhteydenotot": "contact",
   "/tietosuoja":   "privacy",
 };
-const PATHS = { home: "/", custom: "/tilaustyot", contact: "/yhteydenotot", privacy: "/tietosuoja" };
+const PATHS = { home: "/", inspiration: "/inspiraatio", custom: "/tilaustyot", contact: "/yhteydenotot", privacy: "/tietosuoja" };
 function pathToPage(path) { return ROUTES[path] ?? "home"; }
 
 function PageLink({ page, navigate, children, onNavigate, ...props }) {
@@ -147,6 +148,7 @@ function Nav({ page, setPage }) {
   const navRef = useRef(null);
   const links = [
     { id: "home",    label: "Koti" },
+    { id: "inspiration", label: "Inspiraatio" },
     { id: "custom",  label: "Tilaustyöt" },
     { id: "contact", label: "Yhteydenotot" },
   ];
@@ -278,7 +280,7 @@ function SectionTitle({ children }) {
 
 const TEXT_LINK_STYLE = { color:"var(--gold)", textDecoration:"underline", overflowWrap:"anywhere" };
 
-function HomePage({ setModal }) {
+function HomePage({ setModal, navigate }) {
   useSEO({
     title: "Hakalahti – Öljymaalaukset | Osta alkuperäistaulu Kempeleestä",
     description: "Osta alkuperäinen käsinmaalattu öljymaalaus Kempeleestä. Hakalahden uniikkeja tauluja olohuoneeseen — lintuaiheita, maisemia ja luontoa. Tilaustyöt myös.",
@@ -344,7 +346,7 @@ function HomePage({ setModal }) {
           </h2>
           {[
             "Jannen taulut ovat pääasiassa luontoaiheisia käsinmaalattuja öljymaalauksia. Lintuaiheita lienee enemmistö töistä — maisemat ja muutkin aihepiirit pääsevät toisinaan siveltimen alle.",
-            "Monien taulujen inspiraatio saa alkunsa Jannen omista luontokokemuksista. Jokainen maalaus on uniikki alkuperäisteos, maalattu laadukkailla öljyväreillä kankaalle.",
+            <>Monien taulujen <PageLink page="inspiration" navigate={navigate} style={TEXT_LINK_STYLE}>inspiraatio</PageLink> saa alkunsa Jannen omista luontokokemuksista. Jokainen maalaus on uniikki alkuperäisteos, maalattu laadukkailla öljyväreillä kankaalle.</>,
             "Tauluja on myytävänä, ja tilaustyöt onnistuvat myös.",
           ].map((t, i) => (
             <p key={i} style={{ color:"var(--body)", lineHeight:1.85, marginBottom:"0.9rem" }}>{t}</p>
@@ -356,6 +358,55 @@ function HomePage({ setModal }) {
   );
 }
 
+
+function InspirationPage({ navigate }) {
+  useSEO({
+    title: "Taulujen aiheet ja inspiraatio – Hakalahti | Öljymaalaukset luonnosta",
+    description: "Mistä Jannen öljymaalausten aiheet syntyvät? Retket luontoon, eläinten kohtaamiset, värit ja tunnelmat ovat alkusysäys uudelle maalaukselle.",
+    keywords: "taulujen aiheet, inspiraatio, luontomaalaus, lintumaalaus, öljymaalaus luonnosta, taidemaalari kempele, hakalahti",
+    canonical: "/inspiraatio",
+  });
+  return (
+    <div className="page-enter" style={{ maxWidth:720, margin:"0 auto", padding:"5rem 2rem 6rem" }}>
+      <div style={{ marginBottom:"2.5rem" }}>
+        <p style={{ fontSize:"0.68rem", letterSpacing:"0.28em", textTransform:"uppercase", color:"var(--gold)", marginBottom:"0.6rem" }}>
+          Hakalahti
+        </p>
+        <h1 style={{ fontFamily:"var(--font-display)", fontSize:"clamp(1.6rem,3vw,2.4rem)", fontWeight:300, color:"var(--cream)", letterSpacing:"0.02em", lineHeight:1.1 }}>
+          Taulujen aiheet ja inspiraatio
+        </h1>
+        <div style={{ width:48, height:1, background:"var(--gold)", marginTop:"1rem", opacity:0.7 }}/>
+      </div>
+      <p style={{ color:"var(--body)", lineHeight:1.85, marginBottom:"3rem" }}>
+        Kun taulun aihetta miettii ja taulua alkaa suunnittelemaan usein pää lyö tyhjää eikä mikään idea ”sytytä”.
+        Retki luontoon saa useimmiten aikaan muutoksen. Yllättävät tilanteet, eläinten kohtaamiset, värit,
+        maisemat ja tunnelmat ovat alkusysäys uudelle maalaukselle.
+      </p>
+      <img src="/images/janne-luonnossa.webp" width={1200} height={900} loading="lazy"
+        alt="Janne katsomassa kaukoputkella hiekkarannalla auringonlaskun aikaan"
+        style={{ display:"block", width:"100%", height:"auto", border:"1px solid var(--border)", marginBottom:"3rem" }}/>
+      <p className="inspiration-quote">
+        Et voi koskaan tietää milloin inspiraatio iskee. Se voi syntyä ilosta, ahdistuksesta, tai se voi odottaa
+        oven takana kun sen aukaiset.
+      </p>
+      <figure style={{ width:"min(100%, 360px)", margin:"3rem auto 0" }}>
+        <video controls preload="none" playsInline poster="/images/linnun-kohtaaminen-poster.webp"
+          aria-describedby="bird-video-caption"
+          style={{ display:"block", width:"100%", aspectRatio:"9 / 16", background:"var(--dark)", border:"1px solid var(--border)" }}>
+          <source src="/videos/linnun-kohtaaminen.mp4" type="video/mp4"/>
+          Selaimesi ei tue videon toistoa.
+        </video>
+        <figcaption id="bird-video-caption" style={{ color:"var(--muted)", fontSize:"0.88rem", lineHeight:1.7, marginTop:"0.75rem" }}>
+          Video: Janne kohtaa metson oven takana. Metso kysyy: ”Kelpaisinko malliksi?”
+        </figcaption>
+      </figure>
+      <div style={{ display:"flex", flexWrap:"wrap", alignItems:"center", justifyContent:"center", gap:"1.25rem 2rem", marginTop:"4rem" }}>
+        <PageLink page="home" navigate={navigate} style={TEXT_LINK_STYLE}>Katso taulut</PageLink>
+        <PageLink page="contact" navigate={navigate} className="form-btn">Ota yhteyttä</PageLink>
+      </div>
+    </div>
+  );
+}
 
 function GatePanel({ onOpen }) {
   return (
@@ -576,10 +627,11 @@ export default function App() {
   }, []);
 
   const renderPage = () => {
+    if (page === "inspiration") return <InspirationPage navigate={navigate}/>;
     if (page === "custom")  return <CustomPage setPage={navigate}/>;
     if (page === "contact") return <ContactPage navigate={navigate}/>;
     if (page === "privacy") return <PrivacyPage/>;
-    return <HomePage setModal={setModal}/>;
+    return <HomePage setModal={setModal} navigate={navigate}/>;
   };
 
   return (
