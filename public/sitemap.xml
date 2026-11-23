@@ -4,7 +4,7 @@
 
   <url>
     <loc>https://www.hakalahti.com/</loc>
-    <lastmod>2026-07-19</lastmod>
+    <lastmod>2026-11-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="fi" href="https://www.hakalahti.com/"/>
@@ -12,7 +12,7 @@
 
   <url>
     <loc>https://www.hakalahti.com/inspiraatio</loc>
-    <lastmod>2026-11-18</lastmod>
+    <lastmod>2026-11-23</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="fi" href="https://www.hakalahti.com/inspiraatio"/>
@@ -20,7 +20,7 @@
 
   <url>
     <loc>https://www.hakalahti.com/tilaustyot</loc>
-    <lastmod>2026-04-03</lastmod>
+    <lastmod>2026-11-23</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="fi" href="https://www.hakalahti.com/tilaustyot"/>
@@ -28,7 +28,7 @@
 
   <url>
     <loc>https://www.hakalahti.com/yhteydenotot</loc>
-    <lastmod>2026-04-03</lastmod>
+    <lastmod>2026-11-23</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fi" href="https://www.hakalahti.com/yhteydenotot"/>

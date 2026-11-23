@@ -288,6 +288,9 @@ function SectionTitle({ children }) {
 
 const TEXT_LINK_STYLE = { color:"var(--gold)", textDecoration:"underline", overflowWrap:"anywhere" };
 
+const categoryOf = (painting) =>
+  CATEGORIES.some((category) => category.id === painting.category) ? painting.category : "muut";
+
 function PaintingGallery({ setModal }) {
   const jumpLinks = [...CATEGORIES, { id: "ihmishahmo", label: "Ihmishahmo taiteessa" }];
 
@@ -302,7 +305,7 @@ function PaintingGallery({ setModal }) {
         <div key={category.id} id={category.id} className="category-block">
           <h3 className="category-title">{category.label}</h3>
           <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(240px, 1fr))", gap:"1rem" }}>
-            {PAINTINGS.filter((painting) => painting.category === category.id).map((painting, index) => (
+            {PAINTINGS.filter((painting) => categoryOf(painting) === category.id).map((painting, index) => (
               <GalleryCard key={painting.id} painting={painting} onClick={setModal} priority={categoryIndex === 0 && index === 0} titleLevel={4}/>
             ))}
           </div>
