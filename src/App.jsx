@@ -336,7 +336,7 @@ function HomePage({ setModal, navigate }) {
             Hakalahti
           </h1>
           <p style={{ fontFamily:"var(--font-display)", fontStyle:"italic", fontSize:"clamp(1rem,2.5vw,1.4rem)", color:"#c8c4b8", marginTop:"0.8rem", fontWeight:300 }}>
-            Käsinmaalattuja öljymaalauksia luonnosta
+            Öljymaalauksia luonnosta
           </p>
           <div style={{ width:1, height:48, background:"var(--gold)", margin:"2rem auto 0", opacity:0.5 }}/>
         </div>
@@ -373,7 +373,7 @@ function HomePage({ setModal, navigate }) {
             Janne Hakalahti — taidemaalari, Kempele
           </h2>
           {[
-            "Jannen taulut ovat pääasiassa luontoaiheisia käsinmaalattuja öljymaalauksia. Lintuaiheita lienee enemmistö töistä — maisemat ja muutkin aihepiirit pääsevät toisinaan siveltimen alle.",
+            "Jannen taulut ovat pääasiassa luontoaiheisia öljymaalauksia. Lintuaiheita lienee enemmistö töistä — maisemat ja muutkin aihepiirit pääsevät toisinaan siveltimen alle.",
             <>Monien taulujen <PageLink page="inspiration" navigate={navigate} style={TEXT_LINK_STYLE}>inspiraatio</PageLink> saa alkunsa Jannen omista luontokokemuksista. Jokainen maalaus on uniikki alkuperäisteos, maalattu laadukkailla öljyväreillä kankaalle.</>,
             "Tauluja on myytävänä, ja tilaustyöt onnistuvat myös.",
           ].map((t, i) => (
@@ -502,9 +502,9 @@ function CustomPage({ setPage }) {
         Öljymaalaus tilauksesta
       </h1>
       {[
-        "Maalaan myös tilauksesta uniikki öljymaalaus sinulle tai lahjaksi.",
-        "Käsinmaalattu taulu voidaan tehdä valokuvan pohjalta — esimerkiksi linnuista, maisemista tai lemmikeistä. Jokainen tilaustyö on alkuperäinen, uniikki maalaus.",
-        "Käytän töissäni laadukkaita öljyvärejä ja kankaita.",
+        "Maalaan myös tilauksesta tauluja.",
+        "Taulu voidaan tehdä esimerkiksi valokuvan pohjalta.",
+        "Käytän töissäni laadukkaita kankaita ja maaleja.",
       ].map((t, i) => (
         <p key={i} style={{ color:"var(--body)", lineHeight:1.85, marginBottom:"1rem" }}>{t}</p>
       ))}
