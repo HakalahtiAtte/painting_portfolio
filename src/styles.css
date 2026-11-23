@@ -190,14 +190,6 @@
     text-transform: uppercase; padding: 3px 10px;
   }
 
-  .ba-img {
-    width: 100%; display: block;
-    border: 1px solid var(--border);
-    transition: border-color 0.3s, box-shadow 0.3s;
-    cursor: pointer;
-  }
-  .ba-img:hover { border-color: var(--gold); box-shadow: 0 8px 30px rgba(0,0,0,0.5); }
-
   .form-btn {
     background: var(--gold);
     border: none;
@@ -243,53 +235,6 @@
   @media (max-width: 600px) {
     .about-section { flex-direction: column; align-items: center; text-align: center; gap: 1.5rem !important; }
     .about-img { width: 140px !important; height: 140px !important; }
-  }
-
-  /* CustomPage grid — stack on mobile */
-  @media (max-width: 640px) {
-    .custom-grid { grid-template-columns: 1fr !important; }
-  }
-
-  /* Before/After drag slider */
-  .ba-slider {
-    position: relative;
-    overflow: hidden;
-    cursor: ew-resize;
-    user-select: none;
-    touch-action: none;
-    border: 1px solid var(--border);
-    transition: border-color 0.3s;
-  }
-  .ba-slider:hover { border-color: var(--gold); }
-  .ba-slider img { display: block; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
-  .ba-handle {
-    position: absolute; top: 0; bottom: 0;
-    width: 2px; background: var(--gold);
-    transform: translateX(-50%);
-    cursor: ew-resize;
-  }
-  .ba-handle-circle {
-    position: absolute; top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    width: 44px; height: 44px;
-    border-radius: 50%;
-    background: var(--gold);
-    display: flex; align-items: center; justify-content: center;
-    color: #0d0d0b;
-    font-size: 1rem;
-    font-weight: 600;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.5);
-  }
-  .ba-label {
-    position: absolute; bottom: 12px;
-    font-family: var(--font-body);
-    font-size: 0.62rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    padding: 4px 10px;
-    background: rgba(13,13,11,0.75);
-    color: var(--gold);
-    pointer-events: none;
   }
 
   /* Atelier curtain reveal */
