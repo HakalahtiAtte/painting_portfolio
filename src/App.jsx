@@ -315,8 +315,8 @@ function PaintingGallery({ setModal }) {
 function HomePage({ setModal, navigate }) {
   useSEO({
     title: "Hakalahti – Öljymaalaukset | Osta alkuperäistaulu Kempeleestä",
-    description: "Osta alkuperäinen käsinmaalattu öljymaalaus Kempeleestä. Hakalahden uniikkeja tauluja olohuoneeseen — lintuaiheita, maisemia ja luontoa. Tilaustyöt myös.",
-    keywords: "öljymaalaus, taulu kempele, alkuperäismaalaus, käsinmaalattu taulu, uniikki maalaus, taulu olohuoneeseen, suomalainen taide, osta maalaus, lintumaalaus, luontomaalaus, hakalahti, seinätaide kotiin",
+    description: "Osta alkuperäinen öljymaalaus Kempeleestä. Hakalahden uniikkeja tauluja olohuoneeseen — lintuaiheita, maisemia ja luontoa. Tilaustyöt myös.",
+    keywords: "öljymaalaus, taulu kempele, alkuperäismaalaus, uniikki maalaus, taulu olohuoneeseen, suomalainen taide, osta maalaus, lintumaalaus, luontomaalaus, hakalahti, seinätaide kotiin",
     canonical: "/",
   });
 
@@ -491,8 +491,8 @@ function NudeSection({ setModal }) {
 function CustomPage({ setPage }) {
   useSEO({
     title: "Tilaustyöt – Hakalahti | Öljymaalaus tilauksesta, Kempele",
-    description: "Tilaa oma öljymaalaus Hakalahdelta Kempeleestä. Käsinmaalattu taulu valokuvan pohjalta — linnut, maisemat, lemmikit.",
-    keywords: "tilausmaalaus, öljymaalaus tilauksesta, lemmikkimuotokuva, lintumaalaus tilaus, käsinmaalattu lahja, taulu tilauksesta kempele, taulu tilauksesta oulu",
+    description: "Tilaa oma öljymaalaus Hakalahdelta Kempeleestä. Taulu valokuvan pohjalta — linnut, maisemat, lemmikit.",
+    keywords: "tilausmaalaus, öljymaalaus tilauksesta, lemmikkimuotokuva, lintumaalaus tilaus, taulu tilauksesta kempele, taulu tilauksesta oulu",
     canonical: "/tilaustyot",
   });
   return (
