@@ -143,6 +143,34 @@
 
   .gold-rule { border: none; border-top: 1px solid var(--gold); opacity: 0.3; margin: 0; }
 
+  .category-nav { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .category-link {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid var(--border);
+    color: var(--body);
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 0.6rem 0.8rem;
+    min-height: 36px;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  @media (min-width: 540px) { .category-link { letter-spacing: 0.15em; padding: 0.6rem 1.1rem; } }
+  .category-link:hover { border-color: var(--gold); color: var(--cream); }
+  @media (pointer: coarse) { .category-link { min-height: 44px; } }
+
+  .category-block { margin-top: 3.5rem; scroll-margin-top: 5rem; }
+  .category-title {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    font-weight: 300;
+    letter-spacing: 0.04em;
+    color: var(--cream);
+    margin-bottom: 1.25rem;
+  }
+
   .sold-badge {
     position: absolute; top: 10px; right: 10px;
     background: var(--sold); color: #f0c8c8;

@@ -35,48 +35,55 @@ function useSEO({ title, description, keywords, canonical }) {
 }
 
 const PAINTINGS = [
-  { id: "taulu5",  src: "images/taulu5.webp",  title: "Lapinpöllö",              size: "41×30cm",  medium: "Öljymaalaus" },
-  { id: "taulu6",  src: "images/taulu6.webp",  title: "Maakotka",                size: "42×40cm",  medium: "Öljymaalaus" },
-  { id: "taulu7",  src: "images/taulu7.webp",  title: "Ilves",                   size: "40×68cm",  medium: "Öljymaalaus" },
-  { id: "taulu8",  src: "images/taulu8.webp",  title: "Koivut",                  size: "45×85cm",  medium: "Öljymaalaus" },
-  { id: "taulu9",  src: "images/taulu9.webp",  title: "Pitkospuut lintutornille",size: "90×120cm", medium: "Öljymaalaus" },
-  { id: "taulu10", src: "images/taulu10.webp", title: "Talitiainen",             size: "22×22cm",  medium: "Öljymaalaus" },
-  { id: "taulu11", src: "images/taulu11.webp", title: "Punatulkku",              size: "22×22cm",  medium: "Öljymaalaus" },
-  { id: "taulu12", src: "images/taulu12.webp", title: "Töyhtötiainen",           size: "22×22cm",  medium: "Öljymaalaus" },
-  { id: "taulu13", src: "images/taulu13.webp", title: "Tilhi",                   size: "22×22cm",  medium: "Öljymaalaus" },
-  { id: "taulu14", src: "images/taulu14.webp", title: "Villihevonen",            size: "68×60cm",  medium: "Öljymaalaus" },
-  { id: "taulu15", src: "images/taulu15.webp", title: "Karhu",                   size: "40×30cm",  medium: "Öljymaalaus" },
-  { id: "taulu16", src: "images/taulu16.webp", title: "Hömötiainen",             size: "25×19cm",  medium: "Öljymaalaus" },
-  { id: "taulu17", src: "images/taulu17.webp", title: "Hömötiaiset",             size: "30×30cm",  medium: "Öljymaalaus" },
-  { id: "taulu18", src: "images/taulu18.webp", title: "Katse",                   size: "100×45cm", medium: "Öljymaalaus" },
-  { id: "taulu20", src: "images/taulu20.webp", title: "Kotka",                   size: "90×50cm",  medium: "Öljymaalaus" },
-  { id: "taulu21", src: "images/taulu21.webp", title: "Teeret",                  size: "40×30cm",  medium: "Öljymaalaus" },
-  { id: "taulu22", src: "images/taulu22.webp", title: "Oja",                     size: "70×50cm",  medium: "Öljymaalaus" },
-  { id: "taulu23", src: "images/taulu23.webp", title: "Mandariini ja Morsio",    size: "65×30cm",  medium: "Öljymaalaus" },
-  { id: "taulu24", src: "images/taulu24.webp", title: "Ilta",                    size: "45×30cm",  medium: "Öljymaalaus" },
-  { id: "taulu25", src: "images/taulu25.webp", title: "Joutsen",                 size: "85×60cm",  medium: "Öljymaalaus" },
-  { id: "taulu26", src: "images/taulu26.webp", title: "Nuolihaukka",             size: "42×30cm",  medium: "Öljymaalaus" },
-  { id: "taulu27", src: "images/taulu27.webp", title: "Metso",                   size: "68×60cm",  medium: "Öljymaalaus" },
-  { id: "taulu28", src: "images/taulu28.webp", title: "Susi",                    size: "45×60cm",  medium: "Öljymaalaus" },
-  { id: "taulu29", src: "images/taulu29.webp", title: "Lapinpöllö",              size: "45×85cm",  medium: "Öljymaalaus" },
-  { id: "taulu33", src: "images/taulu33.webp", title: "Suojaväritys",            size: "25×100cm", medium: "Öljymaalaus" },
-  { id: "taulu34", src: "images/taulu34.webp", title: "Pala Mäntyä",             size: "30×65cm",  medium: "Öljymaalaus" },
-  { id: "taulu35", src: "images/taulu35.webp", title: "Pyytölamminoja",          size: "60×45cm",  medium: "Öljymaalaus" },
-  { id: "taulu36", src: "images/taulu36.webp", title: "Alkulähteillä",           size: "100×75cm", medium: "Öljymaalaus" },
-  { id: "taulu37", src: "images/taulu37.webp", title: "Joenmutka",               size: "80×60cm",  medium: "Öljymaalaus" },
-  { id: "taulu38", src: "images/taulu38.webp", title: "Suopursut kukkii",        size: "80×60cm",  medium: "Öljymaalaus" },
-  { id: "taulu39", src: "images/taulu39.webp", title: "Puro Kiekkikairassa",     size: "100×75cm", medium: "Öljymaalaus" },
-  { id: "taulu40", src: "images/taulu40.webp", title: "Järvisuo, Mourunki",      size: "80×60cm",  medium: "Öljymaalaus" },
-  { id: "taulu41", src: "images/taulu41.webp", title: "Koivikko",                size: "80×60cm",  medium: "Öljymaalaus" },
-  { id: "taulu43", src: "images/taulu43.webp", title: "Onko lahdella lintuja",   size: "75×100cm", medium: "Öljymaalaus" },
-  { id: "taulu44", src: "images/taulu44.webp", title: "Korpireitti",             size: "64×80cm",  medium: "Öljymaalaus" },
-  { id: "taulu45", src: "images/taulu45.webp", title: "Köykkyrin luontopolun pitkospuut lumen peitossa",size: "60×80cm",  medium: "Öljymaalaus" },
-  { id: "taulu46", src: "images/taulu46.webp", title: "Tundrahanhet", size: "80×60cm",  medium: "Öljymaalaus" },
-  { id: "taulu47", src: "images/taulu47.webp", title: "Tarkkana",                size: "60×68cm",  medium: "Öljymaalaus" },
-  { id: "taulu48", src: "images/taulu48.webp", title: "Näkymä Rastilammelle",   size: "65×85cm",  medium: "Öljymaalaus" },
-  { id: "taulu49", src: "images/taulu49.webp", title: "Haastaja",               size: "130×88cm", medium: "Öljymaalaus" },
-  { id: "taulu50", src: "images/taulu50.webp", title: "Lento",                  size: "88×130cm", medium: "Öljymaalaus" },
-  { id: "taulu51", src: "images/taulu51.webp", title: "Kukkoilijat",            size: "130×88cm", medium: "Öljymaalaus" },
+  { id: "taulu5",  src: "images/taulu5.webp",  title: "Lapinpöllö",              size: "41×30cm",  medium: "Öljymaalaus", category: "linnut" },
+  { id: "taulu6",  src: "images/taulu6.webp",  title: "Maakotka",                size: "42×40cm",  medium: "Öljymaalaus", category: "linnut" },
+  { id: "taulu7",  src: "images/taulu7.webp",  title: "Ilves",                   size: "40×68cm",  medium: "Öljymaalaus", category: "nisakkaat" },
+  { id: "taulu8",  src: "images/taulu8.webp",  title: "Koivut",                  size: "45×85cm",  medium: "Öljymaalaus", category: "maisemat" },
+  { id: "taulu9",  src: "images/taulu9.webp",  title: "Pitkospuut lintutornille",size: "90×120cm", medium: "Öljymaalaus", category: "maisemat" },
+  { id: "taulu10", src: "images/taulu10.webp", title: "Talitiainen",             size: "22×22cm",  medium: "Öljymaalaus", category: "linnut" },
+  { id: "taulu11", src: "images/taulu11.webp", title: "Punatulkku",              size: "22×22cm",  medium: "Öljymaalaus", category: "linnut" },
+  { id: "taulu12", src: "images/taulu12.webp", title: "Töyhtötiainen",           size: "22×22cm",  medium: "Öljymaalaus", category: "linnut" },
+  { id: "taulu13", src: "images/taulu13.webp", title: "Tilhi",                   size: "22×22cm",  medium: "Öljymaalaus", category: "linnut" },
+  { id: "taulu14", src: "images/taulu14.webp", title: "Villihevonen",            size: "68×60cm",  medium: "Öljymaalaus", category: "nisakkaat" },
+  { id: "taulu15", src: "images/taulu15.webp", title: "Karhu",                   size: "40×30cm",  medium: "Öljymaalaus", category: "nisakkaat" },
+  { id: "taulu16", src: "images/taulu16.webp", title: "Hömötiainen",             size: "25×19cm",  medium: "Öljymaalaus", category: "linnut" },
+  { id: "taulu17", src: "images/taulu17.webp", title: "Hömötiaiset",             size: "30×30cm",  medium: "Öljymaalaus", category: "linnut" },
+  { id: "taulu18", src: "images/taulu18.webp", title: "Katse",                   size: "100×45cm", medium: "Öljymaalaus", category: "muut" },
+  { id: "taulu20", src: "images/taulu20.webp", title: "Kotka",                   size: "90×50cm",  medium: "Öljymaalaus", category: "linnut" },
+  { id: "taulu21", src: "images/taulu21.webp", title: "Teeret",                  size: "40×30cm",  medium: "Öljymaalaus", category: "linnut" },
+  { id: "taulu22", src: "images/taulu22.webp", title: "Oja",                     size: "70×50cm",  medium: "Öljymaalaus", category: "maisemat" },
+  { id: "taulu23", src: "images/taulu23.webp", title: "Mandariini ja Morsio",    size: "65×30cm",  medium: "Öljymaalaus", category: "linnut" },
+  { id: "taulu24", src: "images/taulu24.webp", title: "Ilta",                    size: "45×30cm",  medium: "Öljymaalaus", category: "maisemat" },
+  { id: "taulu25", src: "images/taulu25.webp", title: "Joutsen",                 size: "85×60cm",  medium: "Öljymaalaus", category: "linnut" },
+  { id: "taulu26", src: "images/taulu26.webp", title: "Nuolihaukka",             size: "42×30cm",  medium: "Öljymaalaus", category: "linnut" },
+  { id: "taulu27", src: "images/taulu27.webp", title: "Metso",                   size: "68×60cm",  medium: "Öljymaalaus", category: "linnut" },
+  { id: "taulu28", src: "images/taulu28.webp", title: "Susi",                    size: "45×60cm",  medium: "Öljymaalaus", category: "nisakkaat" },
+  { id: "taulu29", src: "images/taulu29.webp", title: "Lapinpöllö",              size: "45×85cm",  medium: "Öljymaalaus", category: "linnut" },
+  { id: "taulu33", src: "images/taulu33.webp", title: "Suojaväritys",            size: "25×100cm", medium: "Öljymaalaus", category: "muut" },
+  { id: "taulu34", src: "images/taulu34.webp", title: "Pala Mäntyä",             size: "30×65cm",  medium: "Öljymaalaus", category: "muut" },
+  { id: "taulu35", src: "images/taulu35.webp", title: "Pyytölamminoja",          size: "60×45cm",  medium: "Öljymaalaus", category: "maisemat" },
+  { id: "taulu36", src: "images/taulu36.webp", title: "Alkulähteillä",           size: "100×75cm", medium: "Öljymaalaus", category: "maisemat" },
+  { id: "taulu37", src: "images/taulu37.webp", title: "Joenmutka",               size: "80×60cm",  medium: "Öljymaalaus", category: "maisemat" },
+  { id: "taulu38", src: "images/taulu38.webp", title: "Suopursut kukkii",        size: "80×60cm",  medium: "Öljymaalaus", category: "maisemat" },
+  { id: "taulu39", src: "images/taulu39.webp", title: "Puro Kiekkikairassa",     size: "100×75cm", medium: "Öljymaalaus", category: "maisemat" },
+  { id: "taulu40", src: "images/taulu40.webp", title: "Järvisuo, Mourunki",      size: "80×60cm",  medium: "Öljymaalaus", category: "maisemat" },
+  { id: "taulu41", src: "images/taulu41.webp", title: "Koivikko",                size: "80×60cm",  medium: "Öljymaalaus", category: "maisemat" },
+  { id: "taulu43", src: "images/taulu43.webp", title: "Onko lahdella lintuja",   size: "75×100cm", medium: "Öljymaalaus", category: "maisemat" },
+  { id: "taulu44", src: "images/taulu44.webp", title: "Korpireitti",             size: "64×80cm",  medium: "Öljymaalaus", category: "maisemat" },
+  { id: "taulu45", src: "images/taulu45.webp", title: "Köykkyrin luontopolun pitkospuut lumen peitossa",size: "60×80cm",  medium: "Öljymaalaus", category: "maisemat" },
+  { id: "taulu46", src: "images/taulu46.webp", title: "Tundrahanhet", size: "80×60cm",  medium: "Öljymaalaus", category: "linnut" },
+  { id: "taulu47", src: "images/taulu47.webp", title: "Tarkkana",                size: "60×68cm",  medium: "Öljymaalaus", category: "linnut" },
+  { id: "taulu48", src: "images/taulu48.webp", title: "Näkymä Rastilammelle",   size: "65×85cm",  medium: "Öljymaalaus", category: "maisemat" },
+  { id: "taulu49", src: "images/taulu49.webp", title: "Haastaja",               size: "130×88cm", medium: "Öljymaalaus", category: "linnut" },
+  { id: "taulu50", src: "images/taulu50.webp", title: "Lento",                  size: "88×130cm", medium: "Öljymaalaus", category: "linnut" },
+  { id: "taulu51", src: "images/taulu51.webp", title: "Kukkoilijat",            size: "130×88cm", medium: "Öljymaalaus", category: "linnut" },
+];
+
+const CATEGORIES = [
+  { id: "linnut",    label: "Linnut" },
+  { id: "nisakkaat", label: "Nisäkkäät" },
+  { id: "maisemat",  label: "Maisemat" },
+  { id: "muut",      label: "Muut" },
 ];
 
 const NUDE_PAINTINGS = [
@@ -238,7 +245,8 @@ function Modal({ painting, onClose }) {
   );
 }
 
-function GalleryCard({ painting, onClick, priority = false }) {
+function GalleryCard({ painting, onClick, priority = false, titleLevel = 3 }) {
+  const TitleTag = `h${titleLevel}`;
   return (
     <article className="gallery-card"
       style={{ borderRadius:0, overflow:"hidden" }}>
@@ -252,7 +260,7 @@ function GalleryCard({ painting, onClick, priority = false }) {
       </div>
       {(painting.title || painting.size || painting.medium) && (
         <div style={{ padding:"0.9rem 1rem 1.1rem", borderTop:"1px solid var(--border)" }}>
-          {painting.title  && <h3 style={{ fontFamily:"var(--font-display)", fontSize:"1.1rem", fontWeight:400, color:"var(--cream)", letterSpacing:"0.04em", marginBottom:"0.3rem" }}><button type="button" className="gallery-open" onClick={() => onClick(painting)} aria-label={`Avaa ${painting.title}`}>{painting.title}</button></h3>}
+          {painting.title  && <TitleTag style={{ fontFamily:"var(--font-display)", fontSize:"1.1rem", fontWeight:400, color:"var(--cream)", letterSpacing:"0.04em", marginBottom:"0.3rem" }}><button type="button" className="gallery-open" onClick={() => onClick(painting)} aria-label={`Avaa ${painting.title}`}>{painting.title}</button></TitleTag>}
           {painting.size   && <p style={{ fontSize:"0.78rem", color:"var(--body)", letterSpacing:"0.08em", textTransform:"uppercase" }}>{painting.size}</p>}
           {painting.medium && <p style={{ fontSize:"0.78rem", color:"var(--gold)", letterSpacing:"0.08em", textTransform:"uppercase", marginTop:"0.15rem" }}>{painting.medium}</p>}
         </div>
@@ -277,6 +285,30 @@ function SectionTitle({ children }) {
 }
 
 const TEXT_LINK_STYLE = { color:"var(--gold)", textDecoration:"underline", overflowWrap:"anywhere" };
+
+function PaintingGallery({ setModal }) {
+  const jumpLinks = [...CATEGORIES, { id: "ihmishahmo", label: "Ihmishahmo taiteessa" }];
+
+  return (
+    <>
+      <nav aria-label="Maalausten aiheet" className="category-nav">
+        {jumpLinks.map((link) => (
+          <a key={link.id} href={`#${link.id}`} className="category-link">{link.label}</a>
+        ))}
+      </nav>
+      {CATEGORIES.map((category, categoryIndex) => (
+        <div key={category.id} id={category.id} className="category-block">
+          <h3 className="category-title">{category.label}</h3>
+          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(240px, 1fr))", gap:"1rem" }}>
+            {PAINTINGS.filter((painting) => painting.category === category.id).map((painting, index) => (
+              <GalleryCard key={painting.id} painting={painting} onClick={setModal} priority={categoryIndex === 0 && index === 0} titleLevel={4}/>
+            ))}
+          </div>
+        </div>
+      ))}
+    </>
+  );
+}
 
 function HomePage({ setModal }) {
   useSEO({
@@ -311,9 +343,8 @@ function HomePage({ setModal }) {
       {/* Gallery — gap increased from 1px to 1rem */}
       <section aria-labelledby="gallery-heading" style={{ maxWidth:1280, margin:"0 auto", padding:"5rem 2rem 4rem" }}>
         <SectionTitle><span id="gallery-heading">Alkuperäiset öljymaalaukset</span></SectionTitle>
-        <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(240px, 1fr))", gap:"1rem" }}>
-          {PAINTINGS.map((p, index) => <GalleryCard key={p.id} painting={p} onClick={setModal} priority={index === 0}/>)}
-        </div>
+        <PaintingGallery setModal={setModal}/>
+        <NudeSection setModal={setModal}/>
       </section>
 
       <hr className="gold-rule" style={{ maxWidth:1280, margin:"0 auto" }}/>
@@ -325,9 +356,6 @@ function HomePage({ setModal }) {
           {SOLD.map((p) => <GalleryCard key={p.id} painting={{ ...p, sold:true }} onClick={setModal}/>)}
         </div>
       </section>
-
-      <hr className="gold-rule" style={{ maxWidth:1280, margin:"0 auto" }}/>
-      <NudeSection setModal={setModal}/>
 
       <hr className="gold-rule" style={{ maxWidth:1280, margin:"0 auto" }}/>
 
@@ -387,8 +415,8 @@ function NudeSection({ setModal }) {
   };
 
   return (
-    <section aria-labelledby="nude-heading" style={{ maxWidth:1280, margin:"0 auto", padding:"4rem 2rem" }}>
-      <SectionTitle><span id="nude-heading">Ihmishahmo taiteessa</span></SectionTitle>
+    <div id="ihmishahmo" className="category-block">
+      <h3 className="category-title">Ihmishahmo taiteessa</h3>
 
       {state === "closed" ? (
         <GatePanel onOpen={handleOpen}/>
@@ -405,7 +433,7 @@ function NudeSection({ setModal }) {
           )}
         </div>
       )}
-    </section>
+    </div>
   );
 }
 
