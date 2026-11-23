@@ -494,8 +494,8 @@ function NudeSection({ setModal }) {
 function CustomPage({ setPage }) {
   useSEO({
     title: "Tilaustyöt – Hakalahti | Öljymaalaus tilauksesta, Kempele",
-    description: "Tilaa oma öljymaalaus Hakalahdelta Kempeleestä. Taulu valokuvan pohjalta — linnut, maisemat, lemmikit.",
-    keywords: "tilausmaalaus, öljymaalaus tilauksesta, lemmikkimuotokuva, lintumaalaus tilaus, taulu tilauksesta kempele, taulu tilauksesta oulu",
+    description: "Tilaa oma öljymaalaus Hakalahdelta Kempeleestä. Taulu voidaan tehdä esimerkiksi valokuvan pohjalta.",
+    keywords: "tilausmaalaus, öljymaalaus tilauksesta, lintumaalaus tilaus, taulu tilauksesta kempele, taulu tilauksesta oulu",
     canonical: "/tilaustyot",
   });
   return (
