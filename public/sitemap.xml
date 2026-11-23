@@ -11,6 +11,14 @@
   </url>
 
   <url>
+    <loc>https://www.hakalahti.com/inspiraatio</loc>
+    <lastmod>2026-11-18</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fi" href="https://www.hakalahti.com/inspiraatio"/>
+  </url>
+
+  <url>
     <loc>https://www.hakalahti.com/tilaustyot</loc>
     <lastmod>2026-04-03</lastmod>
     <changefreq>yearly</changefreq>

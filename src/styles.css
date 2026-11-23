@@ -171,6 +171,17 @@
     margin-bottom: 1.25rem;
   }
 
+  .inspiration-quote {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(1.25rem, 2.6vw, 1.6rem);
+    font-weight: 300;
+    line-height: 1.6;
+    color: var(--cream);
+    border-left: 2px solid var(--gold);
+    padding-left: 1.25rem;
+  }
+
   .sold-badge {
     position: absolute; top: 10px; right: 10px;
     background: var(--sold); color: #f0c8c8;
@@ -223,7 +234,7 @@
     backdrop-filter: blur(12px);
   }
 
-  @media (max-width: 600px) {
+  @media (max-width: 720px) {
     .hamburger { display: flex; }
     .nav-desktop { display: none; }
   }
