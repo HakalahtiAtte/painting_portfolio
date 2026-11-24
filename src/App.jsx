@@ -77,6 +77,7 @@ const PAINTINGS = [
   { id: "taulu49", src: "images/taulu49.webp", title: "Haastaja",               size: "130×88cm", medium: "Öljymaalaus", category: "linnut" },
   { id: "taulu50", src: "images/taulu50.webp", title: "Lento",                  size: "88×130cm", medium: "Öljymaalaus", category: "linnut" },
   { id: "taulu51", src: "images/taulu51.webp", title: "Kukkoilijat",            size: "130×88cm", medium: "Öljymaalaus", category: "linnut" },
+  { id: "taulu52", src: "images/taulu52.webp", title: "Kiviharjuräme",          size: "60×80cm",  medium: "Öljymaalaus", category: "maisemat" },
 ];
 
 const CATEGORIES = [
